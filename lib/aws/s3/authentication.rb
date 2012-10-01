@@ -44,7 +44,7 @@ module AWS
     # The full specification of the authentication protocol can be found at
     # http://docs.amazonwebservices.com/AmazonS3/2006-03-01/RESTAuthentication.html    
     class Authentication
-      constant :AMAZON_HEADER_PREFIX, 'x-amz-'
+      constant :AMAZON_HEADER_PREFIX, 'x-oss-'
       
       # Signature is the abstract super class for the Header and QueryString authentication methods. It does the job
       # of computing the canonical_string using the CanonicalString class as well as encoding the canonical string. The subclasses

@@ -22,13 +22,13 @@ module AmazonDocExampleData
         request['Content-Md5']       = 'c8fdb181845a4ca6b8fec737b3581d76'
         request['Content-Type']      = 'text/html'
         request['Date']              = 'Thu, 17 Nov 2005 18:49:58 GMT'
-        request['X-Amz-Meta-Author'] = 'foo@bar.com'
-        request['X-Amz-Magic']       = 'abracadabra'
+        request['X-OSS-Meta-Author'] = 'foo@bar.com'
+        request['X-OSS-Magic']       = 'abracadabra'
         request
       end
   
       def canonical_string
-        "PUT\nc8fdb181845a4ca6b8fec737b3581d76\ntext/html\nThu, 17 Nov 2005 18:49:58 GMT\nx-amz-magic:abracadabra\nx-amz-meta-author:foo@bar.com\n/quotes/nelson"
+        "PUT\nc8fdb181845a4ca6b8fec737b3581d76\ntext/html\nThu, 17 Nov 2005 18:49:58 GMT\nx-oss-magic:abracadabra\nx-oss-meta-author:foo@bar.com\n/quotes/nelson"
       end
       
       def access_key_id
@@ -40,11 +40,11 @@ module AmazonDocExampleData
       end
       
       def signature
-        'jZNOcbfWmD/A/f3hSvVzXZjM2HU='
+        '63mwfl+zYIOG6k95yxbgMruQ6QI='
       end
       
       def authorization_header
-        'AWS 44CF9590006BF252F707:jZNOcbfWmD/A/f3hSvVzXZjM2HU='
+        'AWS 44CF9590006BF252F707:63mwfl+zYIOG6k95yxbgMruQ6QI='
       end
   end
   

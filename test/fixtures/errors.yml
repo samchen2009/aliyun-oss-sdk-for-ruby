@@ -30,5 +30,5 @@ error_with_no_message: >
     <ArgumentValue>READ</ArgumentValue>
     <RequestId>74A377B1C0FA2BCF</RequestId>
     <HostId>cP4rqsAEtHpN6Ckv08Hr3LXjLzx15/YgyoSqzs779vMR8MrAFSodxZp96wtuMQuI</HostId>
-    <ArgumentName>x-amz-acl</ArgumentName>
+    <ArgumentName>x-oss-acl</ArgumentName>
   </Error>

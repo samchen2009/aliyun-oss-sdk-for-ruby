@@ -86,7 +86,7 @@ module AWS
     #    "content-type"     => "binary/octet-stream",
     #    "etag"             => "\"dc629038ffc674bee6f62eb64ff3a\"",
     #    "date"             => "Sat, 28 Oct 2006 21:30:41 GMT",
-    #    "x-amz-request-id" => "B7BC68F55495B1C8",
+    #    "x-oss-request-id" => "B7BC68F55495B1C8",
     #    "server"           => "AmazonS3",
     #    "content-length"   => "3418766"}
     # 
@@ -98,22 +98,22 @@ module AWS
     #   # => "A River Ain't Too Much To Love"
     #   song.metadata[:released] = 2005
     #   pp song.metadata
-    #   {"x-amz-meta-released" => 2005, 
-    #     "x-amz-meta-album"   => "A River Ain't Too Much To Love"}
+    #   {"x-oss-meta-released" => 2005, 
+    #     "x-oss-meta-album"   => "A River Ain't Too Much To Love"}
     #   song.store
     # 
     # That metadata will be saved in S3 and is hence forth available from that object:
     # 
     #   song = S3Object.find('black-flowers.mp3', 'jukebox')
     #   pp song.metadata
-    #   {"x-amz-meta-released" => "2005", 
-    #     "x-amz-meta-album"   => "A River Ain't Too Much To Love"}
+    #   {"x-oss-meta-released" => "2005", 
+    #     "x-oss-meta-album"   => "A River Ain't Too Much To Love"}
     #   song.metadata[:released]
     #   # => "2005"
     #   song.metadata[:released] = 2006
     #   pp song.metadata
-    #   {"x-amz-meta-released" => 2006, 
-    #    "x-amz-meta-album"    => "A River Ain't Too Much To Love"}
+    #   {"x-oss-meta-released" => 2006, 
+    #    "x-oss-meta-album"    => "A River Ain't Too Much To Love"}
     class S3Object < Base
       class << self        
         # Returns the value of the object with <tt>key</tt> in the specified bucket.
@@ -183,7 +183,7 @@ module AWS
         def copy(key, copy_key, bucket = nil, options = {})
           bucket          = bucket_name(bucket)
           source_key      = path!(bucket, key)
-          default_options = {'x-amz-copy-source' => source_key}
+          default_options = {'x-oss-copy-source' => source_key}
           target_key      = path!(bucket, copy_key)
           returning put(target_key, default_options.merge(options)) do
             acl(copy_key, bucket, acl(key, bucket)) if options[:copy_acl]
@@ -349,7 +349,7 @@ module AWS
       end
       
       class Metadata < Hash #:nodoc:
-        HEADER_PREFIX = 'x-amz-meta-'
+        HEADER_PREFIX = 'x-oss-meta-'
         SIZE_LIMIT    = 2048 # 2 kilobytes
         
         def initialize(headers)
@@ -496,11 +496,11 @@ module AWS
       #
       #   pp some_object.about
       #     {"last-modified"    => "Sat, 28 Oct 2006 21:29:26 GMT",
-      #      "x-amz-id-2"       =>  "LdcQRk5qLwxJQiZ8OH50HhoyKuqyWoJ67B6i+rOE5MxpjJTWh1kCkL+I0NQzbVQn",
+      #      "x-oss-id-2"       =>  "LdcQRk5qLwxJQiZ8OH50HhoyKuqyWoJ67B6i+rOE5MxpjJTWh1kCkL+I0NQzbVQn",
       #      "content-type"     => "binary/octet-stream",
       #      "etag"             => "\"dc629038ffc674bee6f62eb68454ff3a\"",
       #      "date"             => "Sat, 28 Oct 2006 21:30:41 GMT",
-      #      "x-amz-request-id" => "B7BC68F55495B1C8",
+      #      "x-oss-request-id" => "B7BC68F55495B1C8",
       #      "server"           => "AmazonS3",
       #      "content-length"   => "3418766"}
       #
@@ -521,7 +521,7 @@ module AWS
       #   # => {}
       #   some_object.metadata[:author] = 'Dave Thomas'
       #   some_object.metadata
-      #   # => {"x-amz-meta-author" => "Dave Thomas"}
+      #   # => {"x-oss-meta-author" => "Dave Thomas"}
       #   some_object.metadata[:author]
       #   # => "Dave Thomas"
       def metadata

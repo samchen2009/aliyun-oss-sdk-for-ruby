@@ -604,12 +604,12 @@ module AWS
         def process!
           return unless access_level_specified?
           validate!
-          options['x-amz-acl'] = access_level
+          options['x-oss-acl'] = access_level
         end
 
         private
           def extract_access_level
-             options.delete('access') || options.delete('x-amz-acl')
+             options.delete('access') || options.delete('x-oss-acl')
           end
 
           def validate!

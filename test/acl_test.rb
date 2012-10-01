@@ -208,10 +208,10 @@ class ACLOptionProcessorTest < Test::Unit::TestCase
       {'access'    => 'private'},
       {:access     => 'private'},
       {'access'    => :private},
-      {'x-amz-acl' => 'private'},
-      {:x_amz_acl  => :private},
-      {:x_amz_acl  => 'private'},
-      {'x_amz_acl' => :private}
+      {'x-oss-acl' => 'private'},
+      {:x_oss_acl  => :private},
+      {:x_oss_acl  => 'private'},
+      {'x_oss_acl' => :private}
     ]
     
     valid_access_levels.each do |options|
@@ -229,11 +229,11 @@ class ACLOptionProcessorTest < Test::Unit::TestCase
       {:access     => 'public-read'},
       {'access'    => :public_read},
       
-      {'x-amz-acl' => 'public_read'},
-      {:x_amz_acl  => :public_read},
-      {:x_amz_acl  => 'public_read'},
-      {:x_amz_acl  => 'public-read'},
-      {'x_amz_acl' => :public_read}
+      {'x-oss-acl' => 'public_read'},
+      {:x_oss_acl  => :public_read},
+      {:x_oss_acl  => 'public_read'},
+      {:x_oss_acl  => 'public-read'},
+      {'x_oss_acl' => :public_read}
     ]
     
     valid_hyphenated_access_levels.each do |options|
@@ -250,6 +250,6 @@ class ACLOptionProcessorTest < Test::Unit::TestCase
     end
     
     def acl(options)
-      options['x-amz-acl']
+      options['x-oss-acl']
     end
 end

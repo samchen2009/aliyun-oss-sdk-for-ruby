@@ -150,7 +150,7 @@ class ObjectTest < Test::Unit::TestCase
     end
   end
   def test_copy_options_are_used
-    options = {'x-amz-storage-class' => 'REDUCED_REDUNDANCY'}
+    options = {'x-oss-storage-class' => 'REDUCED_REDUNDANCY'}
     resp = FakeResponse.new
 
     connection = flexmock('Mock connection') do |mock|
@@ -173,28 +173,28 @@ class MetadataTest < Test::Unit::TestCase
     
   def test_only_metadata_is_extracted
     assert @metadata.to_headers.size == 1
-    assert @metadata.to_headers['x-amz-meta-test']
-    assert_equal 'foo', @metadata.to_headers['x-amz-meta-test']
+    assert @metadata.to_headers['x-oss-meta-test']
+    assert_equal 'foo', @metadata.to_headers['x-oss-meta-test']
   end
   
   def test_setting_new_metadata_normalizes_name
     @metadata[:bar] = 'baz'
-    assert @metadata.to_headers.include?('x-amz-meta-bar')
+    assert @metadata.to_headers.include?('x-oss-meta-bar')
     @metadata['baz'] = 'quux'
-    assert @metadata.to_headers.include?('x-amz-meta-baz')
-    @metadata['x-amz-meta-quux'] = 'whatever'
-    assert @metadata.to_headers.include?('x-amz-meta-quux')
+    assert @metadata.to_headers.include?('x-oss-meta-baz')
+    @metadata['x-oss-meta-quux'] = 'whatever'
+    assert @metadata.to_headers.include?('x-oss-meta-quux')
   end
   
   def test_clobbering_existing_header
     @metadata[:bar] = 'baz'
-    assert_equal 'baz', @metadata.to_headers['x-amz-meta-bar']
+    assert_equal 'baz', @metadata.to_headers['x-oss-meta-bar']
     @metadata[:bar] = 'quux'
-    assert_equal 'quux', @metadata.to_headers['x-amz-meta-bar']
+    assert_equal 'quux', @metadata.to_headers['x-oss-meta-bar']
     @metadata['bar'] = 'foo'
-    assert_equal 'foo', @metadata.to_headers['x-amz-meta-bar']
-    @metadata['x-amz-meta-bar'] = 'bar'
-    assert_equal 'bar', @metadata.to_headers['x-amz-meta-bar']
+    assert_equal 'foo', @metadata.to_headers['x-oss-meta-bar']
+    @metadata['x-oss-meta-bar'] = 'bar'
+    assert_equal 'bar', @metadata.to_headers['x-oss-meta-bar']
   end
   
   def test_invalid_metadata
