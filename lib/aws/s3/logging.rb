@@ -73,7 +73,7 @@ module AWS
             end
           
             def build
-              xml.tag!('BucketLoggingStatus', 'xmlns' => 'http://s3.amazonaws.com/doc/2006-03-01/') do
+              xml.tag!('BucketLoggingStatus', 'xmlns' => 'http://oss.aliyun.com/doc/2006-03-01/') do
                 if logging_status.target_bucket && logging_status.target_prefix
                   xml.LoggingEnabled do
                     xml.TargetBucket logging_status.target_bucket

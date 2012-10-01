@@ -9,7 +9,7 @@ module AWS
     # Header based authentication is achieved by setting a special <tt>Authorization</tt> header whose value 
     # is formatted like so:
     #
-    #   "AWS #{access_key_id}:#{encoded_canonical}"
+    #   "OSS #{access_key_id}:#{encoded_canonical}"
     #
     # The <tt>access_key_id</tt> is the public key that is assigned by Amazon for a given account which you use when
     # establishing your initial connection. The <tt>encoded_canonical</tt> is computed according to rules layed out 
@@ -92,7 +92,7 @@ module AWS
       class Header < Signature #:nodoc:
         def initialize(*args)
           super
-          self << "AWS #{access_key_id}:#{encoded_canonical}"
+          self << "OSS #{access_key_id}:#{encoded_canonical}"
         end
       end
       
@@ -155,7 +155,7 @@ module AWS
           @headers = {}
           @options = options
           # "For non-authenticated or anonymous requests. A NotImplemented error result code will be returned if 
-          # an authenticated (signed) request specifies a Host: header other than 's3.amazonaws.com'"
+          # an authenticated (signed) request specifies a Host: header other than 'oss.aliyun.com'"
           # (from http://docs.amazonwebservices.com/AmazonS3/2006-03-01/VirtualHosting.html)
           request['Host'] = DEFAULT_HOST
           build

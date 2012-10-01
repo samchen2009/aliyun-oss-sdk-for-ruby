@@ -42,7 +42,7 @@ module AWS #:nodoc:
   # 
   # See more connection details at AWS::S3::Connection::Management::ClassMethods.
   module S3
-    constant :DEFAULT_HOST, 's3.amazonaws.com'
+    constant :DEFAULT_HOST, 'oss.aliyun.com'
     
     # AWS::S3::Base is the abstract super class of all classes who make requests against S3, such as the built in
     # Service, Bucket and S3Object classes. It provides methods for making requests, inferring or setting response classes,
@@ -96,9 +96,9 @@ module AWS #:nodoc:
         # infer the current bucket by looking for it as the subdomain of the current connection's address. If no subdomain
         # is found, CurrentBucketNotSpecified will be raised.
         #
-        #   MusicBucket.establish_connection! :server => 'jukeboxzero.s3.amazonaws.com'
+        #   MusicBucket.establish_connection! :server => 'jukeboxzero.oss.aliyun.com'
         #   MusicBucket.connection.server
-        #   => 'jukeboxzero.s3.amazonaws.com'
+        #   => 'jukeboxzero.oss.aliyun.com'
         #   MusicBucket.current_bucket
         #   => 'jukeboxzero'
         #

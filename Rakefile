@@ -93,12 +93,12 @@ namespace :dist do
   
   desc 'Install with gems'
   task :install => :repackage do
-    sh "sudo gem i pkg/#{spec.name}-#{spec.version}.gem"
+    sh "gem i pkg/#{spec.name}-#{spec.version}.gem"
   end
   
   desc 'Uninstall gem'
   task :uninstall do
-    sh "sudo gem uninstall #{spec.name} -x"
+    sh "gem uninstall #{spec.name} -x"
   end
   
   desc 'Reinstall gem'

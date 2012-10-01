@@ -44,7 +44,7 @@ module AmazonDocExampleData
       end
       
       def authorization_header
-        'AWS 44CF9590006BF252F707:63mwfl+zYIOG6k95yxbgMruQ6QI='
+        'OSS 44CF9590006BF252F707:63mwfl+zYIOG6k95yxbgMruQ6QI='
       end
   end
   
