@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module AWS
   module S3    
     # All authentication is taken care of for you by the AWS::S3 library. None the less, some details of the two types

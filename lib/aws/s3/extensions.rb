@@ -1,4 +1,4 @@
-#encoding: BINARY
+# -*- encoding : utf-8 -*-
 #:stopdoc:
 
 class Hash
@@ -87,7 +87,8 @@ class String
     end
   else
     def remove_extended!
-      gsub!(/[\x80-\xFF]/) { "%02X" % $&[0] }
+      #gsub!(/[\x80-\xFF]/) { "%02X" % $&[0] }
+      gsub!(Regext.new('/[\x80-\xFF]')) { "%02X" % $&[0] }
     end
   end
   
@@ -360,3 +361,4 @@ class XmlGenerator < String #:nodoc:
   end
 end
 #:startdoc:
+

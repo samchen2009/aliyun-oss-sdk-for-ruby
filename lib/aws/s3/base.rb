@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module AWS #:nodoc:
   # AWS::S3 is a Ruby library for Amazon's Simple Storage Service's REST API (http://aws.amazon.com/s3).
   # Full documentation of the currently supported API can be found at http://docs.amazonwebservices.com/AmazonS3/2006-03-01.

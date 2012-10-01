@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module AWS
   module S3
     # Anything you do that makes a request to S3 could result in an error. If it does, the AWS::S3 library will raise an exception 

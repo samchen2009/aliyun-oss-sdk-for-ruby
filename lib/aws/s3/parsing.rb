@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 #:stopdoc:
 module AWS
   module S3

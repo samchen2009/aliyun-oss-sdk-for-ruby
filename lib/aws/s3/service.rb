@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module AWS
   module S3
     # The service lets you find out general information about your account, like what buckets you have. 

@@ -1,9 +1,9 @@
 require 'rubygems'
 require 'rake'
 require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rdoc/task'
 require 'rake/packagetask'
-require 'rake/gempackagetask'
+require 'rubygems/package_task'
 
 require File.dirname(__FILE__) + '/lib/aws/s3'
 
@@ -82,7 +82,7 @@ namespace :dist do
     
   # Regenerate README before packaging
   task :package => 'doc:readme'
-  Rake::GemPackageTask.new(spec) do |pkg|
+  Gem::PackageTask.new(spec) do |pkg|
     pkg.need_tar_gz = true
     pkg.package_files.include('{lib,script,test,support}/**/*')
     pkg.package_files.include('README')
@@ -292,8 +292,7 @@ end if File.exists?(File.join(library_root, 'TODO'))
 
 namespace :site do
   require 'erb'
-  require 'rdoc/markup/simple_markup'
-  require 'rdoc/markup/simple_markup/to_html'
+  require 'rdoc'
   
   readme    = lambda { IO.read('README')[/^== Getting started\n(.*)/m, 1] }
 

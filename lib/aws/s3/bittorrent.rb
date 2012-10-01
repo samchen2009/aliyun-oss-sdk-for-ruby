@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module AWS
   module S3
     # Objects on S3 can be distributed via the BitTorrent file sharing protocol. 

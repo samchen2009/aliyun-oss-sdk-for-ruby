@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module AWS
   module S3
     # Entities in S3 have an associated owner (the person who created them). The owner is a canonical representation of an 

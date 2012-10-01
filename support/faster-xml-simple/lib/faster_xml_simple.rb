@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # 
 # Copyright (c) 2006 Michael Koziarski
 # 

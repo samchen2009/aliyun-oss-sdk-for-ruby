@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require File.dirname(__FILE__) + '/test_helper'
 class BaseResponseTest < Test::Unit::TestCase 
   def setup

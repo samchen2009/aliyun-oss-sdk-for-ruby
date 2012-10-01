@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module AWS
   module S3
     # By default buckets are private. This means that only the owner has access rights to the bucket and its objects. 
