@@ -85,10 +85,10 @@ class ConnectionTest < Test::Unit::TestCase
 
   def test_url_for_uses_default_protocol_server_and_port
     connection = Connection.new(:access_key_id => '123', :secret_access_key => 'abc', :port => 80)
-    assert_match %r(^http://oss\.aliyun\.com/foo\?), connection.url_for('/foo')
+    assert_match %r(^http://oss\.aliyuncs\.com/foo\?), connection.url_for('/foo')
 
     connection = Connection.new(:access_key_id => '123', :secret_access_key => 'abc', :use_ssl => true, :port => 443)
-    assert_match %r(^https://oss\.aliyun\.com/foo\?), connection.url_for('/foo')
+    assert_match %r(^https://oss\.aliyuncs\.com/foo\?), connection.url_for('/foo')
   end
 
   def test_url_for_remembers_custom_protocol_server_and_port
@@ -169,7 +169,7 @@ class ConnectionOptionsTest < Test::Unit::TestCase
   
   def test_invalid_options_raise
     assert_raises(InvalidConnectionOption) do
-      generate_options(:host => 'campfire.oss.aliyun.com')
+      generate_options(:host => 'campfire.oss.aliyuncs.com')
     end
   end
   

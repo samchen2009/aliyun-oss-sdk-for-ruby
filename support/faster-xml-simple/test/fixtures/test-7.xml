@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<AccessControlPolicy xmlns="http://oss.aliyun.com/doc/2006-03-01/">
+<AccessControlPolicy xmlns="http://oss.aliyuncs.com/doc/2006-03-01/">
   <Owner>
     <ID>bb2041a25975c3d4ce9775fe9e93e5b77a6a9fad97dc7e00686191f3790b13f1</ID>
     <DisplayName>noradio</DisplayName>

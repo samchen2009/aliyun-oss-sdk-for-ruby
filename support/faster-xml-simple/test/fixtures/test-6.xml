@@ -1,4 +1,4 @@
-<ListBucketResult xmlns="http://oss.aliyun.com/doc/2006-03-01/">
+<ListBucketResult xmlns="http://oss.aliyuncs.com/doc/2006-03-01/">
   <Name>projectionist</Name>
   <Prefix/>
   <Marker/>

@@ -155,7 +155,7 @@ module AWS
           @headers = {}
           @options = options
           # "For non-authenticated or anonymous requests. A NotImplemented error result code will be returned if 
-          # an authenticated (signed) request specifies a Host: header other than 'oss.aliyun.com'"
+          # an authenticated (signed) request specifies a Host: header other than 'oss.aliyuncs.com'"
           # (from http://docs.amazonwebservices.com/AmazonS3/2006-03-01/VirtualHosting.html)
           request['Host'] = DEFAULT_HOST
           build

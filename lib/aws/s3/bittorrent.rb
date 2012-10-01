@@ -19,7 +19,7 @@ module AWS
     #
     # Anonymous requests to
     #
-    #   http://oss.aliyun.com/marcel/kiss.jpg?torrent
+    #   http://oss.aliyuncs.com/marcel/kiss.jpg?torrent
     #
     # will serve up the torrent file for that object.
     module BitTorrent

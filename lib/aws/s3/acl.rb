@@ -23,7 +23,7 @@ module AWS
     # Since the image we created is publicly readable, we can access it directly from a browser by going to the corresponding bucket name 
     # and specifying the object's key without a special authenticated url:
     # 
-    #  http://oss.aliyun.com/marcel/kiss.jpg
+    #  http://oss.aliyuncs.com/marcel/kiss.jpg
     # 
     # ==== Building custum access policies
     # 
@@ -85,7 +85,7 @@ module AWS
     # 
     # If we were to access this object's acl url from a browser: 
     # 
-    #   http://oss.aliyun.com/marcel/kiss.jpg?acl
+    #   http://oss.aliyuncs.com/marcel/kiss.jpg?acl
     # 
     # we would be shown its access control policy.
     # 
@@ -187,7 +187,7 @@ module AWS
           end
       
           def build
-            xml.tag!('AccessControlPolicy', 'xmlns' => 'http://oss.aliyun.com/doc/2006-03-01/') do
+            xml.tag!('AccessControlPolicy', 'xmlns' => 'http://oss.aliyuncs.com/doc/2006-03-01/') do
               xml.Owner do
                 xml.ID owner.id
                 xml.DisplayName owner.display_name

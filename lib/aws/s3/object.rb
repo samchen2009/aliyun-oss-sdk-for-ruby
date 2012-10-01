@@ -287,7 +287,7 @@ module AWS
         #   S3Object.url_for('beluga_baby.jpg',
         #                    'marcel',
         #                    :authenticated => false)
-        #   # => http://oss.aliyun.com/marcel/beluga_baby.jpg
+        #   # => http://oss.aliyuncs.com/marcel/beluga_baby.jpg
         def url_for(name, bucket = nil, options = {})
           connection.url_for(path!(bucket, name, options), options) # Do not normalize options
         end

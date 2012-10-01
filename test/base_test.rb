@@ -111,7 +111,7 @@ class MultiConnectionsTest < Test::Unit::TestCase
     
     # No need to pass in the required options. The default connection will supply them
     assert_nothing_raised do
-      Bucket.establish_connection!(:server => 'foo.oss.aliyun.com')
+      Bucket.establish_connection!(:server => 'foo.oss.aliyuncs.com')
     end
     
     assert Base.connection != Bucket.connection
@@ -125,7 +125,7 @@ class MultiConnectionsTest < Test::Unit::TestCase
       Base.current_bucket
     end
     
-    S3Object.establish_connection!(:server => 'foo-bucket.oss.aliyun.com')
+    S3Object.establish_connection!(:server => 'foo-bucket.oss.aliyuncs.com')
     assert_nothing_raised do
       assert_equal 'foo-bucket', S3Object.current_bucket
     end
