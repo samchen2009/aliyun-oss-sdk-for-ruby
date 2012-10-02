@@ -39,7 +39,6 @@ AWS::S3::Bucket.class_eval do
 end
 
 AWS::S3::S3Object.class_eval do
-  include AWS::S3::ACL::S3Object
   include AWS::S3::BitTorrent
 end
 
