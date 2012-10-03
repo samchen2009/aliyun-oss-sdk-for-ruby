@@ -310,6 +310,7 @@ module AWS
             if mime_type = MIME::Types.type_for(key).first
               options[:content_type] = mime_type.content_type
             end
+          rescue ArgumentError #ruby1.9 非法utf-8字符dowcase报错  "318597/620065/GTL_75\24300_A600_A610.zip"
           end
       end
       
