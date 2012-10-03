@@ -10,6 +10,8 @@ class RemoteLoggingTest < Test::Unit::TestCase
     disconnect!
   end
   
+  #TODO 日记功能API不确定
+=begin
   def test_logging
     Bucket.create(TEST_BUCKET) # Clear out any custom grants
     
@@ -80,4 +82,5 @@ class RemoteLoggingTest < Test::Unit::TestCase
     
     assert !Bucket.logging_enabled_for?(TEST_BUCKET)
   end
+=end
 end

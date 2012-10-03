@@ -217,7 +217,6 @@ module AWS
       module Management #:nodoc:
         def self.included(klass) #:nodoc:
           klass.extend(ClassMethods)
-          klass.extend(LoggingGrants)
         end
         
         module ClassMethods
@@ -243,7 +242,6 @@ module AWS
             name            = bucket_name(name)
             default_options = {'target_bucket' => name, 'target_prefix' => 'log-'}
             options         = default_options.merge(options)
-            grant_logging_access_to_target_bucket(options['target_bucket'])
             logging_status(name, Status.new(options))
           end
           alias_method :enable_logging, :enable_logging_for
@@ -279,15 +277,6 @@ module AWS
             end
           end
           alias_method :logs, :logs_for
-        end
-        
-        module LoggingGrants #:nodoc:
-          def grant_logging_access_to_target_bucket(target_bucket)
-            acl = acl(target_bucket)
-            acl.grants << ACL::Grant.grant(:logging_write)
-            acl.grants << ACL::Grant.grant(:logging_read_acp)
-            acl(target_bucket, acl)
-          end
         end
         
         def logging_status
