@@ -316,27 +316,6 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     S3Object.delete('name with spaces', TEST_BUCKET)
   end
   
-  def test_copying_an_object_should_copy_over_its_acl_also_if_requested
-    key      = 'copied-objects-inherit-acl'
-    copy_key = key + '2'
-    S3Object.store(key, 'value does not matter', TEST_BUCKET)
-    original_object = S3Object.find(key, TEST_BUCKET)
-    original_object.acl.grants << ACL::Grant.grant(:public_read)
-    original_object.acl.grants << ACL::Grant.grant(:public_read_acp)
-    
-    S3Object.acl(key, TEST_BUCKET, original_object.acl)
-    
-    acl = S3Object.acl(key, TEST_BUCKET)
-    assert_equal 3, acl.grants.size
-    
-    S3Object.copy(key, copy_key, TEST_BUCKET, :copy_acl => true)
-    copied_object = S3Object.find(copy_key, TEST_BUCKET)
-    assert_equal acl.grants, copied_object.acl.grants
-  ensure
-    S3Object.delete(key, TEST_BUCKET)
-    S3Object.delete(copy_key, TEST_BUCKET)
-  end
-  
   def test_handling_a_path_that_is_not_valid_utf8
     key = "318597/620065/GTL_75\24300_A600_A610.zip"
     assert_nothing_raised do
