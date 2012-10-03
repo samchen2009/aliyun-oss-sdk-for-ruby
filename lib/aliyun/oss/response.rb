@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 #:stopdoc:
-module AWS
-  module S3
+module Aliyun
+  module OSS
     class Base
       class Response < String  
         attr_reader :response, :body, :parsed
@@ -71,7 +71,7 @@ module AWS
       end
     end
   
-    class S3Object
+    class OSSObject
       class Response < Base::Response
         def etag
           headers['etag'][1...-1]
@@ -139,7 +139,7 @@ module AWS
       end
   
       def initialize(start)
-        @container     = AWS::S3
+        @container     = Aliyun::OSS
         @current_class = start
       end
   

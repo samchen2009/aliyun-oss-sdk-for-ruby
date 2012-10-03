@@ -34,7 +34,7 @@ head:
 
 - Bug #20487 fixed. If a request fails and is retried, only escape the request path the first time. Reported by [anonymous]
 
-- Replace ad-hoc S3Object.copy method with newly support built in API call.
+- Replace ad-hoc OSSObject.copy method with newly support built in API call.
 
 - Do not make connections persistent by default. This "feature" causes far more broken pipes than it is worth. Use with caution.
 
@@ -58,17 +58,17 @@ head:
 
 - If we are retrying a request after rescuing one of the retry exceptions, rewind the body if its an IO stream so it starts at the beginning. [Jamis Buck]
 
-- Ensure that all paths being submitted to S3 are valid utf8. If they are not, we remove the extended characters. Ample help from [Jamis Buck]
+- Ensure that all paths being submitted to OSS are valid utf8. If they are not, we remove the extended characters. Ample help from [Jamis Buck]
 
 - Wrap logs in Log objects which exposes each line as a Log::Line that has accessors by name for each field.
 
 - Various performance optimizations for the extensions code. [Roman LE NEGRATE <roman2k@free.fr>]
 
-- Make S3Object.copy more efficient by streaming in both directions in parallel.
+- Make OSSObject.copy more efficient by streaming in both directions in parallel.
 
 - Open up Net:HTTPGenericRequest to make the chunk size 1 megabyte, up from 1 kilobyte.
 
-- Add S3Object.exists?
+- Add OSSObject.exists?
 
 0.2.1:
 
@@ -76,11 +76,11 @@ head:
 
 - Don't call CGI.escape on query string parameters in Hash#to_query_string since all paths get passed through URI.escape right before the request is made. Paths were getting double escaped. Bug spotted by [David Hanson]
 
-- Make s3sh exec irb.bat if on Windows. Bug spotted by [N. Sathish Kumar <nsathishk@yahoo.com>]
+- Make osssh exec irb.bat if on Windows. Bug spotted by [N. Sathish Kumar <nsathishk@yahoo.com>]
 
 - Avoid class_variable_(get|set) since it was only recently added to Ruby. Spotted by [N. Sathish Kumar <nsathishk@yahoo.com>]
 
-- Raise NoSuchKey if S3Object.about requests a key that does not exist.
+- Raise NoSuchKey if OSSObject.about requests a key that does not exist.
 
 - If the response body is an empty string, don't try to parse it as xml.
 
@@ -90,7 +90,7 @@ head:
 
 0.2.0:
 
-- Infer content type for an object when calling S3Object.store without explicitly passing in the :content_type option.
+- Infer content type for an object when calling OSSObject.store without explicitly passing in the :content_type option.
 
 0.1.2:
 

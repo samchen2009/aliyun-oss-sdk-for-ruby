@@ -1,58 +1,58 @@
-= AWS::S3
+= Aliyun::OSS
 
-<%= docs_for['AWS::S3'] %>
+<%= docs_for['Aliyun::OSS'] %>
 
-== AWS::S3 Basics
+== Aliyun::OSS Basics
 === The service, buckets and objects
 
-The three main concepts of S3 are the service, buckets and objects. 
+The three main concepts of OSS are the service, buckets and objects. 
 
 ==== The service
 
-<%= docs_for['AWS::S3::Service'] %>
+<%= docs_for['Aliyun::OSS::Service'] %>
  
 ==== Buckets
 
-<%= docs_for['AWS::S3::Bucket'] %>
+<%= docs_for['Aliyun::OSS::Bucket'] %>
 
 ==== Objects
 
-<%= docs_for['AWS::S3::S3Object'] %>
+<%= docs_for['Aliyun::OSS::OSSObject'] %>
 
 ==== Streaming uploads
 
-<%= docs_for['AWS::S3::S3Object::store'] %>
+<%= docs_for['Aliyun::OSS::OSSObject::store'] %>
 
 == Setting the current bucket
 ==== Scoping operations to a specific bucket
 
-<%= docs_for['AWS::S3::Base.set_current_bucket_to'] %>
+<%= docs_for['Aliyun::OSS::Base.set_current_bucket_to'] %>
 
 == BitTorrent
 ==== Another way to download large files
 
-<%= docs_for['AWS::S3::BitTorrent'] %>
+<%= docs_for['Aliyun::OSS::BitTorrent'] %>
 
 == Access control
 ==== Using canned access control policies
 
-<%= docs_for['AWS::S3::ACL'] %>
+<%= docs_for['Aliyun::OSS::ACL'] %>
 
 ==== Accessing private objects from a browser
 
-<%= docs_for['AWS::S3::S3Object.url_for'] %>
+<%= docs_for['Aliyun::OSS::OSSObject.url_for'] %>
 
 == Logging
 ==== Tracking requests made on a bucket
 
-<%= docs_for['AWS::S3::Logging'] %>
+<%= docs_for['Aliyun::OSS::Logging'] %>
 
 == Errors
 ==== When things go wrong
 
-<%= docs_for['AWS::S3::Error'] %>
+<%= docs_for['Aliyun::OSS::Error'] %>
 
 ==== Accessing the last request's response
 
-<%= docs_for['AWS::S3::Service.response'] %>
+<%= docs_for['Aliyun::OSS::Service.response'] %>
   

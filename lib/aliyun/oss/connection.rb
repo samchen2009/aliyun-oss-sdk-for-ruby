@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
-module AWS
-  module S3
+module Aliyun
+  module OSS
     class Connection #:nodoc:
       class << self
         def connect(options = {})
@@ -15,7 +15,7 @@ module AWS
       
       attr_reader :access_key_id, :secret_access_key, :http, :options
       
-      # Creates a new connection. Connections make the actual requests to S3, though these requests are usually 
+      # Creates a new connection. Connections make the actual requests to OSS, though these requests are usually 
       # called from subclasses of Base.
       # 
       # For details on establishing connections, check the Connection::Management::ClassMethods.
@@ -132,7 +132,7 @@ module AWS
         end
         
         def add_user_agent!(request)
-          request['User-Agent'] ||= "AWS::S3/#{Version}"
+          request['User-Agent'] ||= "Aliyun::OSS/#{Version}"
         end
         
         def query_string_authentication(request, options = {})
@@ -154,27 +154,27 @@ module AWS
           base.extend ClassMethods
         end
         
-        # Manage the creation and destruction of connections for AWS::S3::Base and its subclasses. Connections are
+        # Manage the creation and destruction of connections for Aliyun::OSS::Base and its subclasses. Connections are
         # created with establish_connection!.
         module ClassMethods
-          # Creates a new connection with which to make requests to the S3 servers for the calling class.
+          # Creates a new connection with which to make requests to the OSS servers for the calling class.
           #   
-          #   AWS::S3::Base.establish_connection!(:access_key_id => '...', :secret_access_key => '...')
+          #   Aliyun::OSS::Base.establish_connection!(:access_key_id => '...', :secret_access_key => '...')
           #
-          # You can set connections for every subclass of AWS::S3::Base. Once the initial connection is made on
+          # You can set connections for every subclass of Aliyun::OSS::Base. Once the initial connection is made on
           # Base, all subsequent connections will inherit whatever values you don't specify explictly. This allows you to
           # customize details of the connection, such as what server the requests are made to, by just specifying one 
           # option. 
           #
-          #   AWS::S3::Bucket.established_connection!(:use_ssl => true)
+          #   Aliyun::OSS::Bucket.established_connection!(:use_ssl => true)
           #
           # The Bucket connection would inherit the <tt>:access_key_id</tt> and the <tt>:secret_access_key</tt> from
           # Base's connection. Unlike the Base connection, all Bucket requests would be made over SSL.
           #
           # == Required arguments
           #
-          # * <tt>:access_key_id</tt> - The access key id for your S3 account. Provided by Amazon.
-          # * <tt>:secret_access_key</tt> - The secret access key for your S3 account. Provided by Amazon.
+          # * <tt>:access_key_id</tt> - The access key id for your OSS account. Provided by Aliyun.
+          # * <tt>:secret_access_key</tt> - The secret access key for your OSS account. Provided by Aliyun.
           #
           # If any of these required arguments is missing, a MissingAccessKey exception will be raised.
           #
@@ -193,7 +193,7 @@ module AWS
           # with the <tt>:proxy</tt> option.
           # The <tt>:host</tt> setting is required if specifying a <tt>:proxy</tt>. 
           #   
-          #   AWS::S3::Bucket.established_connection!(:proxy => {
+          #   Aliyun::OSS::Bucket.established_connection!(:proxy => {
           #     :host => '...', :port => 8080, :user => 'marcel', :password => 'secret'
           #   })
           def establish_connection!(options = {})
@@ -240,7 +240,7 @@ module AWS
             end
 
             def default_connection_name
-              'AWS::S3::Base'
+              'Aliyun::OSS::Base'
             end
 
             def default_connection

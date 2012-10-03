@@ -1,31 +1,31 @@
 # -*- encoding : utf-8 -*-
-module AWS
-  module S3
-    # S3Objects represent the data you store on S3. They have a key (their name) and a value (their data). All objects belong to a
+module Aliyun
+  module OSS
+    # OSSObjects represent the data you store on OSS. They have a key (their name) and a value (their data). All objects belong to a
     # bucket.
     #
-    # You can store an object on S3 by specifying a key, its data and the name of the bucket you want to put it in:
+    # You can store an object on OSS by specifying a key, its data and the name of the bucket you want to put it in:
     #
-    #   S3Object.store('me.jpg', open('headshot.jpg'), 'photos')
+    #   OSSObject.store('me.jpg', open('headshot.jpg'), 'photos')
     #
-    # The content type of the object will be inferred by its extension. If the appropriate content type can not be inferred, S3 defaults
+    # The content type of the object will be inferred by its extension. If the appropriate content type can not be inferred, OSS defaults
     # to <tt>binary/octet-stream</tt>.
     #
     # If you want to override this, you can explicitly indicate what content type the object should have with the <tt>:content_type</tt> option:
     # 
     #   file = 'black-flowers.m4a'
-    #   S3Object.store(
+    #   OSSObject.store(
     #     file,
     #     open(file),
     #     'jukebox',
     #     :content_type => 'audio/mp4a-latm'
     #   )
     #
-    # You can read more about storing files on S3 in the documentation for S3Object.store.
+    # You can read more about storing files on OSS in the documentation for OSSObject.store.
     #
-    # If you just want to fetch an object you've stored on S3, you just specify its name and its bucket:
+    # If you just want to fetch an object you've stored on OSS, you just specify its name and its bucket:
     #
-    #   picture = S3Object.find 'headshot.jpg', 'photos'
+    #   picture = OSSObject.find 'headshot.jpg', 'photos'
     #
     # N.B. The actual data for the file is not downloaded in both the example where the file appeared in the bucket and when fetched directly. 
     # You get the data for the file like this:
@@ -34,12 +34,12 @@ module AWS
     #
     # You can fetch just the object's data directly:
     #
-    #   S3Object.value 'headshot.jpg', 'photos'
+    #   OSSObject.value 'headshot.jpg', 'photos'
     #
     # Or stream it by passing a block to <tt>stream</tt>:
     # 
     #   open('song.mp3', 'w') do |file|
-    #     S3Object.stream('song.mp3', 'jukebox') do |chunk|
+    #     OSSObject.stream('song.mp3', 'jukebox') do |chunk|
     #       file.write chunk
     #     end
     #   end
@@ -53,16 +53,16 @@ module AWS
     # Other functionality includes:
     #
     #   # Check if an object exists?
-    #   S3Object.exists? 'headshot.jpg', 'photos'
+    #   OSSObject.exists? 'headshot.jpg', 'photos'
     #
     #   # Copying an object
-    #   S3Object.copy 'headshot.jpg', 'headshot2.jpg', 'photos'
+    #   OSSObject.copy 'headshot.jpg', 'headshot2.jpg', 'photos'
     #
     #   # Renaming an object
-    #   S3Object.rename 'headshot.jpg', 'portrait.jpg', 'photos'
+    #   OSSObject.rename 'headshot.jpg', 'portrait.jpg', 'photos'
     #
     #   # Deleting an object
-    #   S3Object.delete 'headshot.jpg', 'photos'
+    #   OSSObject.delete 'headshot.jpg', 'photos'
     # 
     # ==== More about objects and their metadata
     # 
@@ -76,8 +76,8 @@ module AWS
     #   song.content_type = 'application/pdf'
     #   song.store
     # 
-    # (Keep in mind that due to limitations in S3's exposed API, the only way to change things like the content_type
-    # is to PUT the object onto S3 again. In the case of large files, this will result in fully re-uploading the file.)
+    # (Keep in mind that due to limitations in OSS's exposed API, the only way to change things like the content_type
+    # is to PUT the object onto OSS again. In the case of large files, this will result in fully re-uploading the file.)
     # 
     # A bevy of information about an object can be had using the <tt>about</tt> method:
     # 
@@ -87,7 +87,7 @@ module AWS
     #    "etag"             => "\"dc629038ffc674bee6f62eb64ff3a\"",
     #    "date"             => "Sat, 28 Oct 2006 21:30:41 GMT",
     #    "x-oss-request-id" => "B7BC68F55495B1C8",
-    #    "server"           => "AmazonS3",
+    #    "server"           => "AliyunOSS",
     #    "content-length"   => "3418766"}
     # 
     # You can get and set metadata for an object:
@@ -102,9 +102,9 @@ module AWS
     #     "x-oss-meta-album"   => "A River Ain't Too Much To Love"}
     #   song.store
     # 
-    # That metadata will be saved in S3 and is hence forth available from that object:
+    # That metadata will be saved in OSS and is hence forth available from that object:
     # 
-    #   song = S3Object.find('black-flowers.mp3', 'jukebox')
+    #   song = OSSObject.find('black-flowers.mp3', 'jukebox')
     #   pp song.metadata
     #   {"x-oss-meta-released" => "2005", 
     #     "x-oss-meta-album"   => "A River Ain't Too Much To Love"}
@@ -114,7 +114,7 @@ module AWS
     #   pp song.metadata
     #   {"x-oss-meta-released" => 2006, 
     #    "x-oss-meta-album"    => "A River Ain't Too Much To Love"}
-    class S3Object < Base
+    class OSSObject < Base
       class << self        
         # Returns the value of the object with <tt>key</tt> in the specified bucket.
         #
@@ -144,12 +144,12 @@ module AWS
         # Returns the object whose key is <tt>name</tt> in the specified bucket. If the specified key does not
         # exist, a NoSuchKey exception will be raised.
         def find(key, bucket = nil)
-          # N.B. This is arguably a hack. From what the current S3 API exposes, when you retrieve a bucket, it
+          # N.B. This is arguably a hack. From what the current OSS API exposes, when you retrieve a bucket, it
           # provides a listing of all the files in that bucket (assuming you haven't limited the scope of what it returns).
-          # Each file in the listing contains information about that file. It is from this information that an S3Object is built.
+          # Each file in the listing contains information about that file. It is from this information that an OSSObject is built.
           #
-          # If you know the specific file that you want, S3 allows you to make a get request for that specific file and it returns
-          # the value of that file in its response body. This response body is used to build an S3Object::Value object. 
+          # If you know the specific file that you want, OSS allows you to make a get request for that specific file and it returns
+          # the value of that file in its response body. This response body is used to build an OSSObject::Value object. 
           # If you want information about that file, you can make a head request and the headers of the response will contain 
           # information about that file. There is no way, though, to say, give me the representation of just this given file the same 
           # way that it would appear in a bucket listing.
@@ -168,7 +168,7 @@ module AWS
           # something incorrect.
           
           # We need to ensure the key doesn't have extended characters but not uri escape it before doing the lookup and comparing since if the object exists, 
-          # the key on S3 will have been normalized
+          # the key on OSS will have been normalized
           key    = key.remove_extended unless key.valid_utf8?
           bucket = Bucket.find(bucket_name(bucket), :marker => key.previous, :max_keys => 1)
           # If our heuristic failed, trigger a NoSuchKey exception
@@ -206,7 +206,7 @@ module AWS
         
         # Checks if the object with <tt>key</tt> in <tt>bucket</tt> exists.
         #
-        #   S3Object.exists? 'kiss.jpg', 'marcel'
+        #   OSSObject.exists? 'kiss.jpg', 'marcel'
         #   # => true
         def exists?(key, bucket = nil)
           about(key, bucket)
@@ -222,15 +222,15 @@ module AWS
           super(path!(bucket, key, options), options).success?
         end
         
-        # When storing an object on the S3 servers using S3Object.store, the <tt>data</tt> argument can be a string or an I/O stream. 
+        # When storing an object on the OSS servers using OSSObject.store, the <tt>data</tt> argument can be a string or an I/O stream. 
         # If <tt>data</tt> is an I/O stream it will be read in segments and written to the socket incrementally. This approach 
         # may be desirable for very large files so they are not read into memory all at once.
         # 
         #   # Non streamed upload
-        #   S3Object.store('greeting.txt', 'hello world!', 'marcel')
+        #   OSSObject.store('greeting.txt', 'hello world!', 'marcel')
         #
         #   # Streamed upload
-        #   S3Object.store('roots.mpeg', open('roots.mpeg'), 'marcel')
+        #   OSSObject.store('roots.mpeg', open('roots.mpeg'), 'marcel')
         def store(key, data, bucket = nil, options = {})
           validate_key!(key)
           # Must build path before infering content type in case bucket is being used for options
@@ -242,10 +242,10 @@ module AWS
         alias_method :create, :store
         alias_method :save,   :store
         
-        # All private objects are accessible via an authenticated GET request to the S3 servers. You can generate an 
+        # All private objects are accessible via an authenticated GET request to the OSS servers. You can generate an 
         # authenticated url for an object like this:
         #
-        #   S3Object.url_for('beluga_baby.jpg', 'marcel_molina')
+        #   OSSObject.url_for('beluga_baby.jpg', 'marcel_molina')
         #
         # By default authenticated urls expire 5 minutes after they were generated.
         #
@@ -255,20 +255,20 @@ module AWS
         #   # Absolute expiration date 
         #   # (Expires January 18th, 2038)
         #   doomsday = Time.mktime(2038, 1, 18).to_i
-        #   S3Object.url_for('beluga_baby.jpg', 
+        #   OSSObject.url_for('beluga_baby.jpg', 
         #                    'marcel', 
         #                    :expires => doomsday)
         #   
         #   # Expiration relative to now specified in seconds 
         #   # (Expires in 3 hours)
-        #   S3Object.url_for('beluga_baby.jpg', 
+        #   OSSObject.url_for('beluga_baby.jpg', 
         #                    'marcel', 
         #                    :expires_in => 60 * 60 * 3)
         #
         # You can specify whether the url should go over SSL with the <tt>:use_ssl</tt> option:
         #
         #   # Url will use https protocol
-        #   S3Object.url_for('beluga_baby.jpg', 
+        #   OSSObject.url_for('beluga_baby.jpg', 
         #                    'marcel', 
         #                    :use_ssl => true)
         #
@@ -282,7 +282,7 @@ module AWS
         # when the object is publicly readable, pass the
         # <tt>:authenticated</tt> option with a value of <tt>false</tt>.
         #
-        #   S3Object.url_for('beluga_baby.jpg',
+        #   OSSObject.url_for('beluga_baby.jpg',
         #                    'marcel',
         #                    :authenticated => false)
         #   # => http://oss.aliyuncs.com/marcel/beluga_baby.jpg
@@ -403,20 +403,20 @@ module AWS
       # Subsequent saves to the object after setting any of the valid headers settings will be reflected in 
       # information about the object.
       #
-      #   some_s3_object.content_type
+      #   some_oss_object.content_type
       #   => nil
-      #   some_s3_object.content_type = 'text/plain'
+      #   some_oss_object.content_type = 'text/plain'
       #   => "text/plain"
-      #   some_s3_object.content_type
+      #   some_oss_object.content_type
       #   => "text/plain"
-      #   some_s3_object.store
-      #   S3Object.about(some_s3_object.key, some_s3_object.bucket.name)['content-type']
+      #   some_oss_object.store
+      #   OSSObject.about(some_oss_object.key, some_oss_object.bucket.name)['content-type']
       #   => "text/plain"
       include SelectiveAttributeProxy #:nodoc
       
       proxy_to :about, :exclusively => false
       
-      # Initializes a new S3Object.
+      # Initializes a new OSSObject.
       def initialize(attributes = {}, &block)
         super
         self.value  = attributes.delete(:value) 
@@ -437,7 +437,7 @@ module AWS
       end
       
       # Returns true if the current object has been assigned to a bucket yet. Objects must belong to a bucket before they
-      # can be saved onto S3.
+      # can be saved onto OSS.
       def belongs_to_bucket?
         !@bucket.nil?
       end
@@ -445,7 +445,7 @@ module AWS
       
       # Returns the key of the object. If the key is not set, a NoKeySpecified exception will be raised. For cases
       # where you are not sure if the key has been set, you can use the key_set? method. Objects must have a key
-      # set to be saved onto S3. Objects which have already been saved onto S3 will always have their key set.
+      # set to be saved onto OSS. Objects which have already been saved onto OSS will always have their key set.
       def key
         attributes['key'] or raise NoKeySpecified
       end
@@ -477,7 +477,7 @@ module AWS
       #     send_data segment
       #   end 
       #
-      # The full list of options are listed in the documentation for its class method counter part, S3Object::value.
+      # The full list of options are listed in the documentation for its class method counter part, OSSObject::value.
       def value(options = {}, &block)
         if options.is_a?(Hash)
           reload = !options.empty?
@@ -500,7 +500,7 @@ module AWS
       #      "etag"             => "\"dc629038ffc674bee6f62eb68454ff3a\"",
       #      "date"             => "Sat, 28 Oct 2006 21:30:41 GMT",
       #      "x-oss-request-id" => "B7BC68F55495B1C8",
-      #      "server"           => "AmazonS3",
+      #      "server"           => "AliyunOSS",
       #      "content-length"   => "3418766"}
       #
       #  some_object.content_type
@@ -528,7 +528,7 @@ module AWS
       end
       memoized :metadata
       
-      # Saves the current object with the specified <tt>options</tt>. Valid options are listed in the documentation for S3Object::store.
+      # Saves the current object with the specified <tt>options</tt>. Valid options are listed in the documentation for OSSObject::store.
       def store(options = {})
         raise DeletedObject if frozen?
         options  = about.to_headers.merge(options) if stored?
@@ -548,13 +548,13 @@ module AWS
       end
       
       # Copies the current object, given it the name <tt>copy_name</tt>. Keep in mind that due to limitations in 
-      # S3's API, this operation requires retransmitting the entire object to S3.
+      # OSS's API, this operation requires retransmitting the entire object to OSS.
       def copy(copy_name, options = {})
         self.class.copy(key, copy_name, bucket.name, options)
       end
       
-      # Rename the current object. Keep in mind that due to limitations in S3's API, this operation requires
-      # retransmitting the entire object to S3.
+      # Rename the current object. Keep in mind that due to limitations in OSS's API, this operation requires
+      # retransmitting the entire object to OSS.
       def rename(to, options = {})
         self.class.rename(key, to, bucket.name, options)
       end
@@ -573,18 +573,18 @@ module AWS
       memoized :owner
       
       # Generates an authenticated url for the current object. Accepts the same options as its class method
-      # counter part S3Object.url_for.
+      # counter part OSSObject.url_for.
       def url(options = {})
         self.class.url_for(key, bucket.name, options)
       end
       
-      # Returns true if the current object has been stored on S3 yet.
+      # Returns true if the current object has been stored on OSS yet.
       def stored?
         !attributes['e_tag'].nil?
       end
       
-      def ==(s3object) #:nodoc:
-        path == s3object.path
+      def ==(ossobject) #:nodoc:
+        path == ossobject.path
       end
       
       def path #:nodoc:

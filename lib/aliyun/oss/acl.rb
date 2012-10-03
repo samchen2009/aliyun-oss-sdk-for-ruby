@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
-module AWS
-  module S3
+module Aliyun
+  module OSS
     # By default buckets are private. This means that only the owner has access rights to the bucket and its objects. 
     # Objects in that bucket inherit the permission of the bucket unless otherwise specified. When an object is private, the owner can 
     # generate a signed url that exposes the object to anyone who has that url. Alternatively, buckets and objects can be given other 
@@ -12,7 +12,7 @@ module AWS
     # 
     # You can set a canned access level when you create a bucket or an object by using the <tt>:access</tt> option:
     # 
-    #   S3Object.store(
+    #   OSSObject.store(
     #     'kiss.jpg', 
     #     data, 
     #     'marcel', 

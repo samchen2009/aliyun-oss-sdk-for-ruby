@@ -2,7 +2,7 @@
 require 'test/unit'
 require 'uri'
 $:.unshift File.dirname(__FILE__) + '/../../lib'
-require 'aws/s3'
+require 'aliyun/oss'
 begin
   require_library_or_gem 'breakpoint'
 rescue LoadError
@@ -12,11 +12,11 @@ TEST_BUCKET = 'aliyun-oss-tests'
 TEST_FILE   = File.dirname(__FILE__) + '/test_file.data'
 
 class Test::Unit::TestCase
-  include AWS::S3
+  include Aliyun::OSS
   def establish_real_connection
     Base.establish_connection!(
-      :access_key_id     => ENV['AMAZON_ACCESS_KEY_ID'], 
-      :secret_access_key => ENV['AMAZON_SECRET_ACCESS_KEY']
+      :access_key_id     => ENV['OSS_ACCESS_KEY_ID'], 
+      :secret_access_key => ENV['OSS_SECRET_ACCESS_KEY']
     )
   end
   
@@ -28,7 +28,7 @@ class Test::Unit::TestCase
     set_current_bucket_to TEST_BUCKET
   end
   
-  class TestS3Object < S3Object
+  class TestOSSObject < OSSObject
     set_current_bucket_to TEST_BUCKET
   end
 end

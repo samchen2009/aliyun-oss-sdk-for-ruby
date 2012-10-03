@@ -42,7 +42,7 @@ class RemoteBucketTest < Test::Unit::TestCase
     
     assert_nothing_raised do
       %w(a m z).each do |file_name|
-        S3Object.create(file_name, file_name, bucket.name, :content_type => 'text/plain')
+        OSSObject.create(file_name, file_name, bucket.name, :content_type => 'text/plain')
       end
     end
     
@@ -130,7 +130,7 @@ class RemoteBucketTest < Test::Unit::TestCase
     ImplicitlyNamedBucket.current_bucket = TEST_BUCKET
     assert ImplicitlyNamedBucket.objects.empty?
     
-    %w(a b c).each {|key| S3Object.store(key, 'value does not matter', TEST_BUCKET)}
+    %w(a b c).each {|key| OSSObject.store(key, 'value does not matter', TEST_BUCKET)}
     
     assert_equal 3, ImplicitlyNamedBucket.objects.size
     
@@ -142,6 +142,6 @@ class RemoteBucketTest < Test::Unit::TestCase
     assert objects
     assert_equal 1, objects.size
   ensure
-    %w(a b c).each {|key| S3Object.delete(key, TEST_BUCKET)}
+    %w(a b c).each {|key| OSSObject.delete(key, TEST_BUCKET)}
   end
 end

@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
-module AWS
-  module S3
+module Aliyun
+  module OSS
     # A bucket can be set to log the requests made on it. By default logging is turned off. You can check if a bucket has logging enabled:
     # 
     #   Bucket.logging_enabled_for? 'jukebox'
@@ -21,9 +21,9 @@ module AWS
     # Once logs have accumulated, you can access them using the <tt>logs</tt> method:
     # 
     #   pp Bucket.logs('jukebox')
-    #   [#<AWS::S3::Logging::Log '/jukebox-logs/log-2006-11-14-07-15-24-2061C35880A310A1'>,
-    #    #<AWS::S3::Logging::Log '/jukebox-logs/log-2006-11-14-08-15-27-D8EEF536EC09E6B3'>,
-    #    #<AWS::S3::Logging::Log '/jukebox-logs/log-2006-11-14-08-15-29-355812B2B15BD789'>]
+    #   [#<Aliyun::OSS::Logging::Log '/jukebox-logs/log-2006-11-14-07-15-24-2061C35880A310A1'>,
+    #    #<Aliyun::OSS::Logging::Log '/jukebox-logs/log-2006-11-14-08-15-27-D8EEF536EC09E6B3'>,
+    #    #<Aliyun::OSS::Logging::Log '/jukebox-logs/log-2006-11-14-08-15-29-355812B2B15BD789'>]
     #
     # Each log has a <tt>lines</tt> method that gives you information about each request in that log. All the fields are available 
     # as named methods. More information is available in Logging::Log::Line.
@@ -122,7 +122,7 @@ module AWS
           
         # Each line of a log exposes the raw line, but it also has method accessors for all the fields of the logged request.
         #
-        # The list of supported log line fields are listed in the S3 documentation: http://docs.amazonwebservices.com/AmazonS3/2006-03-01/LogFormat.html
+        # The list of supported log line fields are listed in the OSS documentation: http://docs.aliyunwebservices.com/AliyunOSS/2006-03-01/LogFormat.html
         #
         #   line = log.lines.first
         #   line.remote_ip

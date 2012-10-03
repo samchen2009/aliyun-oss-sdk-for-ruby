@@ -9,7 +9,7 @@ class ObjectTest < Test::Unit::TestCase
   
   def test_header_settings_reader_and_writer
     headers = {'content-type' => 'text/plain'}
-    mock_connection_for(S3Object, :returns => {:headers => headers})
+    mock_connection_for(OSSObject, :returns => {:headers => headers})
     
     assert_nothing_raised do
       @object.content_type
@@ -30,12 +30,12 @@ class ObjectTest < Test::Unit::TestCase
   
   def test_key_name_validation
     assert_raises(InvalidKeyName) do
-      S3Object.create(nil, '', 'marcel')
+      OSSObject.create(nil, '', 'marcel')
     end
     
     assert_raises(InvalidKeyName) do
       huge_name = 'a' * 1500
-      S3Object.create(huge_name, '', 'marcel')
+      OSSObject.create(huge_name, '', 'marcel')
     end
   end
   
@@ -50,7 +50,7 @@ class ObjectTest < Test::Unit::TestCase
       ['foo.jpg',  {:content_type => 'image/png'}, 'image/png'],
       ['foo.asdf', {:content_type => 'image/jpg'}, 'image/jpg']
     ].each do |key, options, content_type|
-      S3Object.send(:infer_content_type!, key, options)
+      OSSObject.send(:infer_content_type!, key, options)
       assert_equal content_type, options[:content_type]
     end
   end
@@ -74,53 +74,53 @@ class ObjectTest < Test::Unit::TestCase
   end
   
   def test_fetching_object_value_generates_value_object
-    mock_connection_for(S3Object, :returns => {:body => 'hello!'})
-    value = S3Object.value('foo', 'bar')
-    assert_kind_of S3Object::Value, value
+    mock_connection_for(OSSObject, :returns => {:body => 'hello!'})
+    value = OSSObject.value('foo', 'bar')
+    assert_kind_of OSSObject::Value, value
     assert_equal 'hello!', value
   end
   
   def test_fetching_file_by_name_raises_when_heuristic_fails
     mock_connection_for(Bucket, :returns => {:body => Fixtures::Buckets.bucket_with_one_key})
     assert_raises(NoSuchKey) do
-      S3Object.find('not_tongue_overload.jpg', 'marcel_molina')
+      OSSObject.find('not_tongue_overload.jpg', 'marcel_molina')
     end
     
     object = nil # Block scoping
     assert_nothing_raised do
-      object = S3Object.find('tongue_overload.jpg', 'marcel_molina')
+      object = OSSObject.find('tongue_overload.jpg', 'marcel_molina')
     end
-    assert_kind_of S3Object, object
+    assert_kind_of OSSObject, object
     assert_equal 'tongue_overload.jpg', object.key
   end
   
   def test_about
     headers = {'content-size' => '12345', 'date' => Time.now.httpdate, 'content-type' => 'application/xml'}
-    mock_connection_for(S3Object, :returns => [
+    mock_connection_for(OSSObject, :returns => [
       {:headers => headers},
       {:code    => 404}
       ]
     )
-    about = S3Object.about('foo', 'bar')
-    assert_kind_of S3Object::About, about
+    about = OSSObject.about('foo', 'bar')
+    assert_kind_of OSSObject::About, about
     assert_equal headers, about
     
     assert_raises(NoSuchKey) do
-      S3Object.about('foo', 'bar')
+      OSSObject.about('foo', 'bar')
     end
   end
   
-  def test_can_tell_that_an_s3object_does_not_exist
-    mock_connection_for(S3Object, :returns => {:code => 404})
-    assert_equal false, S3Object.exists?('foo', 'bar')
+  def test_can_tell_that_an_ossobject_does_not_exist
+    mock_connection_for(OSSObject, :returns => {:code => 404})
+    assert_equal false, OSSObject.exists?('foo', 'bar')
   end
   
-  def test_can_tell_that_an_s3object_exists
-    mock_connection_for(S3Object, :returns => {:code => 200})
-    assert_equal true, S3Object.exists?('foo', 'bar')
+  def test_can_tell_that_an_ossobject_exists
+    mock_connection_for(OSSObject, :returns => {:code => 200})
+    assert_equal true, OSSObject.exists?('foo', 'bar')
   end
   
-  def test_s3object_equality
+  def test_ossobject_equality
     mock_connection_for(Bucket, :returns => {:body => Fixtures::Buckets.bucket_with_more_than_one_key})
     file1, file2 = Bucket.objects('does not matter')
     assert file1 == file1
@@ -130,7 +130,7 @@ class ObjectTest < Test::Unit::TestCase
   
   def test_inspect
     mock_connection_for(Bucket, :returns => {:body => Fixtures::Buckets.bucket_with_one_key})
-    object = S3Object.find('tongue_overload.jpg', 'bucket does not matter')
+    object = OSSObject.find('tongue_overload.jpg', 'bucket does not matter')
     assert object.path
     assert_nothing_raised { object.inspect }
     assert object.inspect[object.path]
@@ -138,15 +138,15 @@ class ObjectTest < Test::Unit::TestCase
  
   def test_etag
     mock_connection_for(Bucket, :returns => {:body => Fixtures::Buckets.bucket_with_one_key})
-    file = S3Object.find('tongue_overload.jpg', 'bucket does not matter')
+    file = OSSObject.find('tongue_overload.jpg', 'bucket does not matter')
     assert file.etag
     assert_equal 'f21f7c4e8ea6e34b268887b07d6da745', file.etag
   end
  
   def test_fetching_information_about_an_object_that_does_not_exist_raises_no_such_key
-    mock_connection_for(S3Object, :returns => {:body => '', :code => 404})
+    mock_connection_for(OSSObject, :returns => {:body => '', :code => 404})
     assert_raises(NoSuchKey) do
-      S3Object.about('asdfasdfasdfas-this-does-not-exist', 'bucket does not matter')
+      OSSObject.about('asdfasdfasdfas-this-does-not-exist', 'bucket does not matter')
     end
   end
   def test_copy_options_are_used
@@ -159,16 +159,16 @@ class ObjectTest < Test::Unit::TestCase
         with(:put, '/some-bucket/new', hsh(options), any, any).
         and_return(resp)
     end
-    flexmock(S3Object).should_receive(:connection).and_return(connection)
+    flexmock(OSSObject).should_receive(:connection).and_return(connection)
 
-    result = S3Object.copy('old', 'new', 'some-bucket', options)
+    result = OSSObject.copy('old', 'new', 'some-bucket', options)
     assert_equal resp.code, result.code
   end
 end
 
 class MetadataTest < Test::Unit::TestCase
   def setup
-    @metadata = S3Object::Metadata.new(Fixtures::Headers.headers_including_one_piece_of_metadata)
+    @metadata = OSSObject::Metadata.new(Fixtures::Headers.headers_including_one_piece_of_metadata)
   end
     
   def test_only_metadata_is_extracted
@@ -198,7 +198,7 @@ class MetadataTest < Test::Unit::TestCase
   end
   
   def test_invalid_metadata
-    @metadata[:invalid_header] = ' ' * (S3Object::Metadata::SIZE_LIMIT + 1)
+    @metadata[:invalid_header] = ' ' * (OSSObject::Metadata::SIZE_LIMIT + 1)
     assert_raises InvalidMetadataValue do
       @metadata.to_headers
     end
@@ -208,7 +208,7 @@ end
 class ValueTest < Test::Unit::TestCase
   def setup
     @response = FakeResponse.new(:body => 'hello there')
-    @value    = S3Object::Value.new(@response)
+    @value    = OSSObject::Value.new(@response)
   end
   
   def test_value_is_set_to_response_body

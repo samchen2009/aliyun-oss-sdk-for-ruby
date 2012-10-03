@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 #:stopdoc:
-module AWS
-  module S3
+module Aliyun
+  module OSS
     module Parsing
       class << self
         def parser=(parsing_library)

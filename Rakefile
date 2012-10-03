@@ -5,7 +5,7 @@ require 'rdoc/task'
 require 'rake/packagetask'
 require 'rubygems/package_task'
 
-require File.dirname(__FILE__) + '/lib/aws/s3'
+require File.dirname(__FILE__) + '/lib/aliyun/oss'
 
 def library_root
   File.dirname(__FILE__)
@@ -21,7 +21,7 @@ end
 namespace :doc do
   Rake::RDocTask.new do |rdoc|  
     rdoc.rdoc_dir = 'doc'  
-    rdoc.title    = "AWS::S3 -- Support for Amazon S3's REST api"  
+    rdoc.title    = "Aliyun::OSS -- Support for Aliyun OSS's REST api"  
     rdoc.options << '--line-numbers' << '--inline-source'
     rdoc.rdoc_files.include('README')
     rdoc.rdoc_files.include('COPYING')
@@ -52,30 +52,30 @@ namespace :doc do
   end
   
   task :deploy => :rerdoc do
-    sh %(scp -r doc marcel@rubyforge.org:/var/www/gforge-projects/amazon/)
+    sh %(scp -r doc marcel@rubyforge.org:/var/www/gforge-projects/aliyun/)
   end
 end
 
 namespace :dist do  
   spec = Gem::Specification.new do |s|
-    s.name              = 'aws-s3'
-    s.version           = Gem::Version.new(AWS::S3::Version)
-    s.summary           = "Client library for Amazon's Simple Storage Service's REST API"
+    s.name              = 'aliyun-oss'
+    s.version           = Gem::Version.new(Aliyun::OSS::Version)
+    s.summary           = "Client library for Aliyun's Simple Storage Service's REST API"
     s.description       = s.summary
     s.email             = 'marcel@vernix.org'
     s.author            = 'Marcel Molina Jr.'
     s.has_rdoc          = true
     s.extra_rdoc_files  = %w(README COPYING INSTALL)
-    s.homepage          = 'http://amazon.rubyforge.org'
-    s.rubyforge_project = 'amazon'
+    s.homepage          = 'http://aliyun.rubyforge.org'
+    s.rubyforge_project = 'aliyun'
     s.files             = FileList['Rakefile', 'lib/**/*.rb', 'bin/*', 'support/**/*.rb']
-    s.executables       << 's3sh'
+    s.executables       << 'osssh'
     s.test_files        = Dir['test/**/*']
     
     s.add_dependency 'xml-simple'
     s.add_dependency 'builder'
     s.add_dependency 'mime-types'
-    s.rdoc_options  = ['--title', "AWS::S3 -- Support for Amazon S3's REST api",
+    s.rdoc_options  = ['--title', "Aliyun::OSS -- Support for Aliyun OSS's REST api",
                        '--main',  'README',
                        '--line-numbers', '--inline-source']
   end
@@ -162,7 +162,7 @@ namespace :dist do
   desc 'Upload a beta gem'
   task :push_beta_gem => [:clobber_package, :package] do
     beta_gem = package_name[spec]
-    sh %(scp #{beta_gem}.gem  marcel@rubyforge.org:/var/www/gforge-projects/amazon/beta)
+    sh %(scp #{beta_gem}.gem  marcel@rubyforge.org:/var/www/gforge-projects/aliyun/beta)
   end
   
   task :spec do
@@ -326,7 +326,7 @@ namespace :site do
   task :deploy => :build do
     site_files = FileList['site/public/*']
     site_files.delete_if {|file| File.directory?(file)}
-    sh %(scp #{site_files.join ' '} marcel@rubyforge.org:/var/www/gforge-projects/amazon/)
+    sh %(scp #{site_files.join ' '} marcel@rubyforge.org:/var/www/gforge-projects/aliyun/)
   end
 end 
 

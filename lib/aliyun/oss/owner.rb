@@ -1,8 +1,8 @@
 # -*- encoding : utf-8 -*-
-module AWS
-  module S3
-    # Entities in S3 have an associated owner (the person who created them). The owner is a canonical representation of an 
-    # entity in the S3 system. It has an <tt>id</tt> and a <tt>display_name</tt>. 
+module Aliyun
+  module OSS
+    # Entities in OSS have an associated owner (the person who created them). The owner is a canonical representation of an 
+    # entity in the OSS system. It has an <tt>id</tt> and a <tt>display_name</tt>. 
     # 
     # These attributes can be used when specifying a ACL::Grantee for an ACL::Grant.
     #

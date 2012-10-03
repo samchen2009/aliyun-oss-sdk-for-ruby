@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 require File.dirname(__FILE__) + '/test_helper'
 
-class RemoteS3ObjectTest < Test::Unit::TestCase
+class RemoteOSSObjectTest < Test::Unit::TestCase
   def setup
     establish_real_connection
   end
@@ -11,7 +11,7 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
   end
   
   def test_object
-    key                 = 'testing_s3objects'
+    key                 = 'testing_ossobjects'
     value               = 'testing'
     content_type        = 'text/plain'
     unauthenticated_url = ['http:/', Base.connection.http.address, TEST_BUCKET, key].join('/')
@@ -20,7 +20,7 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     
     response = nil
     assert_nothing_raised do
-      response = S3Object.create(key, value, TEST_BUCKET, :content_type => content_type)
+      response = OSSObject.create(key, value, TEST_BUCKET, :content_type => content_type)
     end
     
     # Check response
@@ -39,7 +39,7 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     # Confirm we can't create an object unless the bucket is set
     
     assert_raises(NoBucketSpecified) do
-      object = S3Object.new
+      object = OSSObject.new
       object.key = 'hello'
       object.store
     end
@@ -48,7 +48,7 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     
     object = nil
     assert_nothing_raised do
-      object = S3Object.find(key, TEST_BUCKET)
+      object = OSSObject.find(key, TEST_BUCKET)
     end
     
     assert object
@@ -70,10 +70,10 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     # Confirm its value was properly set
     
     assert_equal value, object.value
-    assert_equal value, S3Object.value(key, TEST_BUCKET)
+    assert_equal value, OSSObject.value(key, TEST_BUCKET)
     streamed_value = ''
     assert_nothing_raised do
-      S3Object.stream(key, TEST_BUCKET) do |segment|
+      OSSObject.stream(key, TEST_BUCKET) do |segment|
         streamed_value << segment
       end
     end
@@ -128,7 +128,7 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     key = object.key
     object = nil
     assert_nothing_raised do
-      object = S3Object.find(key, TEST_BUCKET)
+      object = OSSObject.find(key, TEST_BUCKET)
     end
     
     # Confirm all changes were persisted
@@ -161,14 +161,14 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     # Copy the object
     
     assert_nothing_raised do
-      object.copy('testing_s3objects-copy')
+      object.copy('testing_ossobjects-copy')
     end
     
     # Confirm the object is identical
     
     copy = nil
     assert_nothing_raised do
-      copy = S3Object.find('testing_s3objects-copy', TEST_BUCKET)
+      copy = OSSObject.find('testing_ossobjects-copy', TEST_BUCKET)
     end
     
     assert copy
@@ -187,14 +187,14 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     renamed_to = copy.key + '-renamed'
     renamed_value = copy.value
     assert_nothing_raised do
-      S3Object.rename(copy.key, renamed_to, TEST_BUCKET)
+      OSSObject.rename(copy.key, renamed_to, TEST_BUCKET)
     end
     
     # Confirm renamed copy exists
     
     renamed = nil
     assert_nothing_raised do
-      renamed = S3Object.find(renamed_to, TEST_BUCKET)
+      renamed = OSSObject.find(renamed_to, TEST_BUCKET)
     end
     
     assert renamed
@@ -203,7 +203,7 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     # Confirm copy is deleted
     
     assert_raises(NoSuchKey) do
-      S3Object.find(copy.key, TEST_BUCKET)
+      OSSObject.find(copy.key, TEST_BUCKET)
     end
     
     # Confirm that you can not store an object once it is deleted
@@ -213,7 +213,7 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     end
     
     assert_raises(NoSuchKey) do
-      S3Object.find(key, TEST_BUCKET)
+      OSSObject.find(key, TEST_BUCKET)
     end
     
     # Confirm we can pass in an IO stream and have the uploading sent in chunks
@@ -221,15 +221,15 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     response = nil
     test_file_key = File.basename(TEST_FILE)
     assert_nothing_raised do
-      response = S3Object.store(test_file_key, open(TEST_FILE), TEST_BUCKET)
+      response = OSSObject.store(test_file_key, open(TEST_FILE), TEST_BUCKET)
     end
     assert response.success?
     
-    assert_equal File.size(TEST_FILE), Integer(S3Object.about(test_file_key, TEST_BUCKET)['content-length'])
+    assert_equal File.size(TEST_FILE), Integer(OSSObject.about(test_file_key, TEST_BUCKET)['content-length'])
     
     result = nil
     assert_nothing_raised do
-      result = S3Object.delete(test_file_key, TEST_BUCKET)
+      result = OSSObject.delete(test_file_key, TEST_BUCKET)
     end
     
     assert result
@@ -240,67 +240,67 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
 
     content_type_objects = {'foo.jpg' => 'image/jpeg', 'no-extension-specified' => 'binary/octet-stream', 'foo.txt' => 'text/plain'}
     content_type_objects.each_key  do |key|
-      S3Object.store(key, 'fake data', TEST_BUCKET) # No content type explicitly set
+      OSSObject.store(key, 'fake data', TEST_BUCKET) # No content type explicitly set
     end
 
     content_type_objects.each do |key, content_type|
-      assert_equal content_type, S3Object.about(key, TEST_BUCKET)['content-type']
+      assert_equal content_type, OSSObject.about(key, TEST_BUCKET)['content-type']
     end
     
     # Confirm we can update the content type
     
     assert_nothing_raised do
-      object = S3Object.find('no-extension-specified', TEST_BUCKET)
+      object = OSSObject.find('no-extension-specified', TEST_BUCKET)
       object.content_type = 'application/pdf'
       object.store
     end
     
-    assert_equal 'application/pdf', S3Object.about('no-extension-specified', TEST_BUCKET)['content-type']
+    assert_equal 'application/pdf', OSSObject.about('no-extension-specified', TEST_BUCKET)['content-type']
     
   ensure
     # Get rid of objects we just created
-    content_type_objects.each_key {|key| S3Object.delete(key, TEST_BUCKET) }
+    content_type_objects.each_key {|key| OSSObject.delete(key, TEST_BUCKET) }
   end
   
   def test_body_can_be_more_than_just_string_or_io
     require 'stringio'
     key = 'testing-body-as-string-io'
     io = StringIO.new('hello there')
-    S3Object.store(key, io, TEST_BUCKET)
-    assert_equal 'hello there', S3Object.value(key, TEST_BUCKET)
+    OSSObject.store(key, io, TEST_BUCKET)
+    assert_equal 'hello there', OSSObject.value(key, TEST_BUCKET)
   ensure
-    S3Object.delete(key, TEST_BUCKET)
+    OSSObject.delete(key, TEST_BUCKET)
   end
   
   def test_fetching_information_about_an_object_that_does_not_exist_raises_no_such_key
     assert_raises(NoSuchKey) do
-      S3Object.about('asdfasdfasdfas-this-does-not-exist', TEST_BUCKET)
+      OSSObject.about('asdfasdfasdfas-this-does-not-exist', TEST_BUCKET)
     end
   end
   
-  # Regression test for http://developer.amazonwebservices.com/connect/thread.jspa?messageID=49152&tstart=0#49152
+  # Regression test for http://developer.aliyunwebservices.com/connect/thread.jspa?messageID=49152&tstart=0#49152
   def test_finding_an_object_with_slashes_in_its_name_does_not_escape_the_slash
-    S3Object.store('rails/1', 'value does not matter', TEST_BUCKET)
-    S3Object.store('rails/1.html', 'value does not matter', TEST_BUCKET)
+    OSSObject.store('rails/1', 'value does not matter', TEST_BUCKET)
+    OSSObject.store('rails/1.html', 'value does not matter', TEST_BUCKET)
     
     object = nil
     assert_nothing_raised do
-      object = S3Object.find('rails/1.html', TEST_BUCKET)
+      object = OSSObject.find('rails/1.html', TEST_BUCKET)
     end
     
     assert_equal 'rails/1.html', object.key
   ensure
-    %w(rails/1 rails/1.html).each {|key| S3Object.delete(key, TEST_BUCKET)}
+    %w(rails/1 rails/1.html).each {|key| OSSObject.delete(key, TEST_BUCKET)}
   end
   
   def test_finding_an_object_with_spaces_in_its_name    
     assert_nothing_raised do
-      S3Object.store('name with spaces', 'value does not matter', TEST_BUCKET)
+      OSSObject.store('name with spaces', 'value does not matter', TEST_BUCKET)
     end
     
     object = nil
     assert_nothing_raised do
-      object = S3Object.find('name with spaces', TEST_BUCKET)
+      object = OSSObject.find('name with spaces', TEST_BUCKET)
     end
     
     assert object
@@ -312,25 +312,25 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     assert (200..299).include?(response.code.to_i)
     
   ensure
-    S3Object.delete('name with spaces', TEST_BUCKET)
+    OSSObject.delete('name with spaces', TEST_BUCKET)
   end
   
   def test_handling_a_path_that_is_not_valid_utf8
     key = "318597/620065/GTL_75\24300_A600_A610.zip"
     assert_nothing_raised do
-      S3Object.store(key, 'value does not matter', TEST_BUCKET)
+      OSSObject.store(key, 'value does not matter', TEST_BUCKET)
     end
     
     object = nil
     assert_nothing_raised do
-      object = S3Object.find(key, TEST_BUCKET)
+      object = OSSObject.find(key, TEST_BUCKET)
     end
 
     assert object
     
     url = nil
     assert_nothing_raised do
-      url = S3Object.url_for(key, TEST_BUCKET)
+      url = OSSObject.url_for(key, TEST_BUCKET)
     end
     
     assert url
@@ -338,7 +338,7 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     assert_equal object.value, fetch_object_at(url).body
   ensure
     assert_nothing_raised do
-      S3Object.delete(key, TEST_BUCKET)
+      OSSObject.delete(key, TEST_BUCKET)
     end
   end
   

@@ -74,7 +74,7 @@ class String
     end
   end
   
-  # All paths in in S3 have to be valid unicode so this takes care of 
+  # All paths in in OSS have to be valid unicode so this takes care of 
   # cleaning up any strings that aren't valid utf-8 according to String#valid_utf8?
   if RUBY_VERSION >= '1.9'
     def remove_extended!
@@ -117,7 +117,7 @@ class CoercibleString < String
   end
   
   private
-    # Lame hack since Date._parse is so accepting. S3 dates are of the form: '2006-10-29T23:14:47.000Z'
+    # Lame hack since Date._parse is so accepting. OSS dates are of the form: '2006-10-29T23:14:47.000Z'
     # so unless the string looks like that, don't even try, otherwise it might convert an object's
     # key from something like '03 1-2-3-Apple-Tree.mp3' to Sat Feb 03 00:00:00 CST 2001.
     def datetime_format
@@ -201,20 +201,20 @@ class Module
   
   # Transforms MarcelBucket into
   #
-  #   class MarcelBucket < AWS::S3::Bucket
+  #   class MarcelBucket < Aliyun::OSS::Bucket
   #     set_current_bucket_to 'marcel'
   #   end
-  def const_missing_from_s3_library(sym)
-    if sym.to_s =~ /^(\w+)(Bucket|S3Object)$/
-      const = const_set(sym, Class.new(AWS::S3.const_get($2)))
+  def const_missing_from_oss_library(sym)
+    if sym.to_s =~ /^(\w+)(Bucket|OSSObject)$/
+      const = const_set(sym, Class.new(Aliyun::OSS.const_get($2)))
       const.current_bucket = $1.underscore
       const
     else
-      const_missing_not_from_s3_library(sym)
+      const_missing_not_from_oss_library(sym)
     end
   end
-  alias_method :const_missing_not_from_s3_library, :const_missing
-  alias_method :const_missing, :const_missing_from_s3_library
+  alias_method :const_missing_not_from_oss_library, :const_missing
+  alias_method :const_missing, :const_missing_from_oss_library
 end
 
 

@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
-module AWS
-  module S3
+module Aliyun
+  module OSS
     # The service lets you find out general information about your account, like what buckets you have. 
     # 
     #   Service.buckets
@@ -28,7 +28,7 @@ module AWS
         end
         memoized :buckets
         
-        # Sometimes methods that make requests to the S3 servers return some object, like a Bucket or an S3Object. 
+        # Sometimes methods that make requests to the OSS servers return some object, like a Bucket or an OSSObject. 
         # Other times they return just <tt>true</tt>. Other times they raise an exception that you may want to rescue. Despite all these 
         # possible outcomes, every method that makes a request stores its response object for you in Service.response. You can always 
         # get to the last request's response via Service.response.

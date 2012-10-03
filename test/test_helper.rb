@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'test/unit'
 $:.unshift File.dirname(__FILE__) + '/../lib'
-require 'aws/s3'
+require 'aliyun/oss'
 require File.dirname(__FILE__) + '/mocks/fake_response'
 require File.dirname(__FILE__) + '/fixtures'
 begin
@@ -12,8 +12,7 @@ require_library_or_gem 'flexmock'
 require_library_or_gem 'flexmock/test_unit'
 
 
-# Data copied from http://docs.amazonwebservices.com/AmazonS3/2006-03-01/RESTAuthentication.html
-module AmazonDocExampleData
+module AliyunDocExampleData
   module Example1
     module_function
     
@@ -85,7 +84,7 @@ module AmazonDocExampleData
 end
 
 class Test::Unit::TestCase
-  include AWS::S3
+  include Aliyun::OSS
   
   def sample_proxy_settings
     {:host => 'http://google.com', :port => 8080, :user => 'marcel', :password => 'secret'}

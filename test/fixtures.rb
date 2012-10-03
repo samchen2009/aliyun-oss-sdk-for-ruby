@@ -1,8 +1,8 @@
 # -*- encoding : utf-8 -*-
 require 'yaml'
 
-module AWS
-  module S3
+module Aliyun
+  module OSS
     # When this file is loaded, for each fixture file, a module is created within the Fixtures module
     # with the same name as the fixture file. For each fixture in that fixture file, a singleton method is 
     # added to the module with the name of the given fixture, returning the value of the fixture.

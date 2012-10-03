@@ -8,7 +8,7 @@ class RegressionTest < FasterXSTest
     assert_equal expected, FasterXmlSimple.xml_in("<asdf><jklsemicolon /></asdf>", 'forcearray'=>['asdf'])
   end
   
-  def test_s3_regression
+  def test_oss_regression
     str = File.read("test/fixtures/test-7.xml")
     assert_nil FasterXmlSimple.xml_in(str)["AccessControlPolicy"]["AccessControlList"]["__content__"]
   end

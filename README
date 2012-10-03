@@ -1,52 +1,52 @@
-= AWS::S3
+= Aliyun::OSS
 
-AWS::S3 is a Ruby library for Amazon's Simple Storage Service's REST API (http://aws.amazon.com/s3).
-Full documentation of the currently supported API can be found at http://docs.amazonwebservices.com/AmazonS3/2006-03-01.
+Aliyun::OSS is a Ruby library for Aliyun's Simple Storage Service's REST API (http://aliyun.aliyun.com/oss).
+Full documentation of the currently supported API can be found at http://docs.aliyunwebservices.com/AliyunOSS/2006-03-01.
 
 == Getting started
 
-To get started you need to require 'aws/s3':
+To get started you need to require 'aliyun/oss':
 
   % irb -rubygems
-  irb(main):001:0> require 'aws/s3'
+  irb(main):001:0> require 'aliyun/oss'
   # => true
 
-The AWS::S3 library ships with an interactive shell called <tt>s3sh</tt>. From within it, you have access to all the operations the library exposes from the command line.
+The Aliyun::OSS library ships with an interactive shell called <tt>oss</tt>. From within it, you have access to all the operations the library exposes from the command line.
 
-  % s3sh
+  % oss
   >> Version
 
 Before you can do anything, you must establish a connection using Base.establish_connection!.  A basic connection would look something like this:
 
-  AWS::S3::Base.establish_connection!(
+  Aliyun::OSS::Base.establish_connection!(
     :access_key_id     => 'abc', 
     :secret_access_key => '123'
   )
 
 The minimum connection options that you must specify are your access key id and your secret access key.
 
-(If you don't already have your access keys, all you need to sign up for the S3 service is an account at Amazon. You can sign up for S3 and get access keys by visiting http://aws.amazon.com/s3.)
+(If you don't already have your access keys, all you need to sign up for the OSS service is an account at Aliyun. You can sign up for OSS and get access keys by visiting http://aliyun.aliyun.com/oss.)
 
 For convenience, if you set two special environment variables with the value of your access keys, the console will automatically create a default connection for you. For example:
 
-  % cat .amazon_keys
-  export AMAZON_ACCESS_KEY_ID='abcdefghijklmnop'
-  export AMAZON_SECRET_ACCESS_KEY='1234567891012345'
+  % cat .oss_keys
+  export OSS_ACCESS_KEY_ID='abcdefghijklmnop'
+  export OSS_SECRET_ACCESS_KEY='1234567891012345'
 
 Then load it in your shell's rc file.
 
   % cat .zshrc
-  if [[ -f "$HOME/.amazon_keys" ]]; then
-    source "$HOME/.amazon_keys";
+  if [[ -f "$HOME/.oss_keys" ]]; then
+    source "$HOME/.oss_keys";
   fi
 
-See more connection details at AWS::S3::Connection::Management::ClassMethods.
+See more connection details at Aliyun::OSS::Connection::Management::ClassMethods.
 
 
-== AWS::S3 Basics
+== Aliyun::OSS Basics
 === The service, buckets and objects
 
-The three main concepts of S3 are the service, buckets and objects. 
+The three main concepts of OSS are the service, buckets and objects. 
 
 ==== The service
 
@@ -58,19 +58,19 @@ The service lets you find out general information about your account, like what 
  
 ==== Buckets
 
-Buckets are containers for objects (the files you store on S3). To create a new bucket you just specify its name.
+Buckets are containers for objects (the files you store on OSS). To create a new bucket you just specify its name.
 
   # Pick a unique name, or else you'll get an error 
   # if the name is already taken.
   Bucket.create('jukebox')
 
-Bucket names must be unique across the entire S3 system, sort of like domain names across the internet. If you try
+Bucket names must be unique across the entire OSS system, sort of like domain names across the internet. If you try
 to create a bucket with a name that is already taken, you will get an error.
 
 Assuming the name you chose isn't already taken, your new bucket will now appear in the bucket list:
 
   Service.buckets
-  # => [#<AWS::S3::Bucket @attributes={"name"=>"jukebox"}>]
+  # => [#<Aliyun::OSS::Bucket @attributes={"name"=>"jukebox"}>]
 
 Once you have succesfully created a bucket you can fetch it by name using Bucket.find.
 
@@ -93,17 +93,17 @@ be found in the documentation for Bucket.find.
 To add an object to a bucket you specify the name of the object, its value, and the bucket to put it in.
 
   file = 'black-flowers.mp3'
-  S3Object.store(file, open(file), 'jukebox')
+  OSSObject.store(file, open(file), 'jukebox')
 
 You'll see your file has been added to it:
 
   music_bucket.objects
-  # => [#<AWS::S3::S3Object '/jukebox/black-flowers.mp3'>]
+  # => [#<Aliyun::OSS::OSSObject '/jukebox/black-flowers.mp3'>]
 
 You can treat your bucket like a hash and access objects by name:
 
   jukebox['black-flowers.mp3']
-  # => #<AWS::S3::S3Object '/jukebox/black-flowers.mp3'>
+  # => #<Aliyun::OSS::OSSObject '/jukebox/black-flowers.mp3'>
 
 In the event that you want to delete a bucket, you can use Bucket.delete.
 
@@ -120,31 +120,31 @@ Passing the :force => true option to delete will take care of deleting all the b
 
 ==== Objects
 
-S3Objects represent the data you store on S3. They have a key (their name) and a value (their data). All objects belong to a
+OSSObjects represent the data you store on OSS. They have a key (their name) and a value (their data). All objects belong to a
 bucket.
 
-You can store an object on S3 by specifying a key, its data and the name of the bucket you want to put it in:
+You can store an object on OSS by specifying a key, its data and the name of the bucket you want to put it in:
 
-  S3Object.store('me.jpg', open('headshot.jpg'), 'photos')
+  OSSObject.store('me.jpg', open('headshot.jpg'), 'photos')
 
-The content type of the object will be inferred by its extension. If the appropriate content type can not be inferred, S3 defaults
+The content type of the object will be inferred by its extension. If the appropriate content type can not be inferred, OSS defaults
 to <tt>binary/octet-stream</tt>.
 
 If you want to override this, you can explicitly indicate what content type the object should have with the <tt>:content_type</tt> option:
 
   file = 'black-flowers.m4a'
-  S3Object.store(
+  OSSObject.store(
     file,
     open(file),
     'jukebox',
     :content_type => 'audio/mp4a-latm'
   )
 
-You can read more about storing files on S3 in the documentation for S3Object.store.
+You can read more about storing files on OSS in the documentation for OSSObject.store.
 
-If you just want to fetch an object you've stored on S3, you just specify its name and its bucket:
+If you just want to fetch an object you've stored on OSS, you just specify its name and its bucket:
 
-  picture = S3Object.find 'headshot.jpg', 'photos'
+  picture = OSSObject.find 'headshot.jpg', 'photos'
 
 N.B. The actual data for the file is not downloaded in both the example where the file appeared in the bucket and when fetched directly. 
 You get the data for the file like this:
@@ -153,12 +153,12 @@ You get the data for the file like this:
 
 You can fetch just the object's data directly:
 
-  S3Object.value 'headshot.jpg', 'photos'
+  OSSObject.value 'headshot.jpg', 'photos'
 
 Or stream it by passing a block to <tt>stream</tt>:
 
   open('song.mp3', 'w') do |file|
-    S3Object.stream('song.mp3', 'jukebox') do |chunk|
+    OSSObject.stream('song.mp3', 'jukebox') do |chunk|
       file.write chunk
     end
   end
@@ -172,16 +172,16 @@ tell the object to reload its <tt>value</tt>:
 Other functionality includes:
 
   # Check if an object exists?
-  S3Object.exists? 'headshot.jpg', 'photos'
+  OSSObject.exists? 'headshot.jpg', 'photos'
 
   # Copying an object
-  S3Object.copy 'headshot.jpg', 'headshot2.jpg', 'photos'
+  OSSObject.copy 'headshot.jpg', 'headshot2.jpg', 'photos'
 
   # Renaming an object
-  S3Object.rename 'headshot.jpg', 'portrait.jpg', 'photos'
+  OSSObject.rename 'headshot.jpg', 'portrait.jpg', 'photos'
 
   # Deleting an object
-  S3Object.delete 'headshot.jpg', 'photos'
+  OSSObject.delete 'headshot.jpg', 'photos'
 
 ==== More about objects and their metadata
 
@@ -195,8 +195,8 @@ You can change the content type as well if you like:
   song.content_type = 'application/pdf'
   song.store
 
-(Keep in mind that due to limitiations in S3's exposed API, the only way to change things like the content_type
-is to PUT the object onto S3 again. In the case of large files, this will result in fully re-uploading the file.)
+(Keep in mind that due to limitiations in OSS's exposed API, the only way to change things like the content_type
+is to PUT the object onto OSS again. In the case of large files, this will result in fully re-uploading the file.)
 
 A bevie of information about an object can be had using the <tt>about</tt> method:
 
@@ -206,7 +206,7 @@ A bevie of information about an object can be had using the <tt>about</tt> metho
    "etag"             => "\"dc629038ffc674bee6f62eb64ff3a\"",
    "date"             => "Sat, 28 Oct 2006 21:30:41 GMT",
    "x-amz-request-id" => "B7BC68F55495B1C8",
-   "server"           => "AmazonS3",
+   "server"           => "AliyunOSS",
    "content-length"   => "3418766"}
 
 You can get and set metadata for an object:
@@ -221,9 +221,9 @@ You can get and set metadata for an object:
     "x-amz-meta-album"   => "A River Ain't Too Much To Love"}
   song.store
 
-That metadata will be saved in S3 and is hence forth available from that object:
+That metadata will be saved in OSS and is hence forth available from that object:
 
-  song = S3Object.find('black-flowers.mp3', 'jukebox')
+  song = OSSObject.find('black-flowers.mp3', 'jukebox')
   pp song.metadata
   {"x-amz-meta-released" => "2005", 
     "x-amz-meta-album"   => "A River Ain't Too Much To Love"}
@@ -237,24 +237,24 @@ That metadata will be saved in S3 and is hence forth available from that object:
 
 ==== Streaming uploads
 
-When storing an object on the S3 servers using S3Object.store, the <tt>data</tt> argument can be a string or an I/O stream. 
+When storing an object on the OSS servers using OSSObject.store, the <tt>data</tt> argument can be a string or an I/O stream. 
 If <tt>data</tt> is an I/O stream it will be read in segments and written to the socket incrementally. This approach 
 may be desirable for very large files so they are not read into memory all at once.
 
   # Non streamed upload
-  S3Object.store('greeting.txt', 'hello world!', 'marcel')
+  OSSObject.store('greeting.txt', 'hello world!', 'marcel')
 
   # Streamed upload
-  S3Object.store('roots.mpeg', open('roots.mpeg'), 'marcel')
+  OSSObject.store('roots.mpeg', open('roots.mpeg'), 'marcel')
 
 
 == Setting the current bucket
 ==== Scoping operations to a specific bucket
 
 If you plan on always using a specific bucket for certain files, you can skip always having to specify the bucket by creating 
-a subclass of Bucket or S3Object and telling it what bucket to use:
+a subclass of Bucket or OSSObject and telling it what bucket to use:
 
-  class JukeBoxSong < AWS::S3::S3Object
+  class JukeBoxSong < Aliyun::OSS::OSSObject
     set_current_bucket_to 'jukebox'
   end
 
@@ -279,25 +279,25 @@ Now all operations that would have required a bucket name no longer do.
 == BitTorrent
 ==== Another way to download large files
 
-Objects on S3 can be distributed via the BitTorrent file sharing protocol. 
+Objects on OSS can be distributed via the BitTorrent file sharing protocol. 
 
 You can get a torrent file for an object by calling <tt>torrent_for</tt>:
 
-  S3Object.torrent_for 'kiss.jpg', 'marcel'
+  OSSObject.torrent_for 'kiss.jpg', 'marcel'
 
 Or just call the <tt>torrent</tt> method if you already have the object:
 
-  song = S3Object.find 'kiss.jpg', 'marcel'
+  song = OSSObject.find 'kiss.jpg', 'marcel'
   song.torrent
 
 Calling <tt>grant_torrent_access_to</tt> on a object will allow anyone to anonymously
 fetch the torrent file for that object:
 
-  S3Object.grant_torrent_access_to 'kiss.jpg', 'marcel'
+  OSSObject.grant_torrent_access_to 'kiss.jpg', 'marcel'
 
 Anonymous requests to
 
-  http://s3.amazonaws.com/marcel/kiss.jpg?torrent
+  http://oss.aliyuncs.com/marcel/kiss.jpg?torrent
 
 will serve up the torrent file for that object.
 
@@ -313,11 +313,11 @@ access levels. Several canned access levels are defined:
 * <tt>:private</tt> - Owner gets FULL_CONTROL. No one else has any access rights. This is the default.
 * <tt>:public_read</tt> - Owner gets FULL_CONTROL and the anonymous principal is granted READ access. If this policy is used on an object, it can be read from a browser with no authentication.
 * <tt>:public_read_write</tt> - Owner gets FULL_CONTROL, the anonymous principal is granted READ and WRITE access. This is a useful policy to apply to a bucket, if you intend for any anonymous user to PUT objects into the bucket.
-* <tt>:authenticated_read</tt> - Owner gets FULL_CONTROL, and any principal authenticated as a registered Amazon S3 user is granted READ access.
+* <tt>:authenticated_read</tt> - Owner gets FULL_CONTROL, and any principal authenticated as a registered Aliyun OSS user is granted READ access.
 
 You can set a canned access level when you create a bucket or an object by using the <tt>:access</tt> option:
 
-  S3Object.store(
+  OSSObject.store(
     'kiss.jpg', 
     data, 
     'marcel', 
@@ -327,16 +327,16 @@ You can set a canned access level when you create a bucket or an object by using
 Since the image we created is publicly readable, we can access it directly from a browser by going to the corresponding bucket name 
 and specifying the object's key without a special authenticated url:
 
- http://s3.amazonaws.com/marcel/kiss.jpg
+ http://oss.aliyuncs.com/marcel/kiss.jpg
 
 ==== Building custum access policies
 
 For both buckets and objects, you can use the <tt>acl</tt> method to see its access control policy:
 
-  policy = S3Object.acl('kiss.jpg', 'marcel')
+  policy = OSSObject.acl('kiss.jpg', 'marcel')
   pp policy.grants
-  [#<AWS::S3::ACL::Grant FULL_CONTROL to noradio>,
-   #<AWS::S3::ACL::Grant READ to AllUsers Group>]
+  [#<Aliyun::OSS::ACL::Grant FULL_CONTROL to noradio>,
+   #<Aliyun::OSS::ACL::Grant READ to AllUsers Group>]
 
 Policies are made up of one or more grants which grant a specific permission to some grantee. Here we see the default FULL_CONTROL grant 
 to the owner of this object. There is also READ permission granted to the Allusers Group, which means anyone has read access for the object.
@@ -347,17 +347,17 @@ the object itself (for example, from a browser) but it does not allow them to re
 First we'll create a new grant object:
 
   grant = ACL::Grant.new
-  # => #<AWS::S3::ACL::Grant (permission) to (grantee)>
+  # => #<Aliyun::OSS::ACL::Grant (permission) to (grantee)>
   grant.permission = 'READ_ACP'
 
 Now we need to indicate who this grant is for. In other words, who the grantee is:
 
   grantee = ACL::Grantee.new
-  # => #<AWS::S3::ACL::Grantee (xsi not set yet)>
+  # => #<Aliyun::OSS::ACL::Grantee (xsi not set yet)>
 
-There are three ways to specify a grantee: 1) by their internal amazon id, such as the one returned with an object's Owner, 
-2) by their Amazon account email address or 3) by specifying a group. As of this writing you can not create custom groups, but 
-Amazon does provide three already: AllUsers, Authenticated and LogDelivery. In this case we want to provide the grant to all users. 
+There are three ways to specify a grantee: 1) by their internal aliyun id, such as the one returned with an object's Owner, 
+2) by their Aliyun account email address or 3) by specifying a group. As of this writing you can not create custom groups, but 
+Aliyun does provide three already: AllUsers, Authenticated and LogDelivery. In this case we want to provide the grant to all users. 
 This effectively means "anyone".
 
   grantee.group = 'AllUsers'
@@ -366,30 +366,30 @@ Now that our grantee is setup, we'll associate it with the grant:
 
   grant.grantee = grantee
   grant
-  # => #<AWS::S3::ACL::Grant READ_ACP to AllUsers Group>
+  # => #<Aliyun::OSS::ACL::Grant READ_ACP to AllUsers Group>
 
 Are grant has all the information we need. Now that it's ready, we'll add it on to the object's access control policy's list of grants:
 
   policy.grants << grant
   pp policy.grants
-  [#<AWS::S3::ACL::Grant FULL_CONTROL to noradio>,
-   #<AWS::S3::ACL::Grant READ to AllUsers Group>,
-   #<AWS::S3::ACL::Grant READ_ACP to AllUsers Group>]
+  [#<Aliyun::OSS::ACL::Grant FULL_CONTROL to noradio>,
+   #<Aliyun::OSS::ACL::Grant READ to AllUsers Group>,
+   #<Aliyun::OSS::ACL::Grant READ_ACP to AllUsers Group>]
 
 Now that the policy has the new grant, we reuse the <tt>acl</tt> method to persist the policy change:
 
-  S3Object.acl('kiss.jpg', 'marcel', policy)
+  OSSObject.acl('kiss.jpg', 'marcel', policy)
 
 If we fetch the object's policy again, we see that the grant has been added:
 
-  pp S3Object.acl('kiss.jpg', 'marcel').grants
-  [#<AWS::S3::ACL::Grant FULL_CONTROL to noradio>,
-   #<AWS::S3::ACL::Grant READ to AllUsers Group>,
-   #<AWS::S3::ACL::Grant READ_ACP to AllUsers Group>]
+  pp OSSObject.acl('kiss.jpg', 'marcel').grants
+  [#<Aliyun::OSS::ACL::Grant FULL_CONTROL to noradio>,
+   #<Aliyun::OSS::ACL::Grant READ to AllUsers Group>,
+   #<Aliyun::OSS::ACL::Grant READ_ACP to AllUsers Group>]
 
 If we were to access this object's acl url from a browser: 
 
-  http://s3.amazonaws.com/marcel/kiss.jpg?acl
+  http://oss.aliyuncs.com/marcel/kiss.jpg?acl
 
 we would be shown its access control policy.
 
@@ -401,17 +401,17 @@ and <tt>:public_read_acp</tt>, which happen to be the two grants that we built b
 
   policy.grants << ACL::Grant.grant(:public_read)
   policy.grants << ACL::Grant.grant(:public_read_acp)
-  S3Object.acl('kiss.jpg', 'marcel', policy)
+  OSSObject.acl('kiss.jpg', 'marcel', policy)
 
 The full details can be found in ACL::Policy, ACL::Grant and ACL::Grantee.
 
 
 ==== Accessing private objects from a browser
 
-All private objects are accessible via an authenticated GET request to the S3 servers. You can generate an 
+All private objects are accessible via an authenticated GET request to the OSS servers. You can generate an 
 authenticated url for an object like this:
 
-  S3Object.url_for('beluga_baby.jpg', 'marcel_molina')
+  OSSObject.url_for('beluga_baby.jpg', 'marcel_molina')
 
 By default authenticated urls expire 5 minutes after they were generated.
 
@@ -421,20 +421,20 @@ or with a number of seconds relative to now with the <tt>:expires_in</tt> option
   # Absolute expiration date 
   # (Expires January 18th, 2038)
   doomsday = Time.mktime(2038, 1, 18).to_i
-  S3Object.url_for('beluga_baby.jpg', 
+  OSSObject.url_for('beluga_baby.jpg', 
                    'marcel', 
                    :expires => doomsday)
   
   # Expiration relative to now specified in seconds 
   # (Expires in 3 hours)
-  S3Object.url_for('beluga_baby.jpg', 
+  OSSObject.url_for('beluga_baby.jpg', 
                    'marcel', 
                    :expires_in => 60 * 60 * 3)
 
 You can specify whether the url should go over SSL with the <tt>:use_ssl</tt> option:
 
   # Url will use https protocol
-  S3Object.url_for('beluga_baby.jpg', 
+  OSSObject.url_for('beluga_baby.jpg', 
                    'marcel', 
                    :use_ssl => true)
 
@@ -448,10 +448,10 @@ To get an unauthenticated url for the object, such as in the case
 when the object is publicly readable, pass the
 <tt>:authenticated</tt> option with a value of <tt>false</tt>.
 
-  S3Object.url_for('beluga_baby.jpg',
+  OSSObject.url_for('beluga_baby.jpg',
                    'marcel',
                    :authenticated => false)
-  # => http://s3.amazonaws.com/marcel/beluga_baby.jpg
+  # => http://oss.aliyuncs.com/marcel/beluga_baby.jpg
 
 
 == Logging
@@ -477,9 +477,9 @@ Now instead of logging right into the jukebox bucket, the logs will go into the 
 Once logs have accumulated, you can access them using the <tt>logs</tt> method:
 
   pp Bucket.logs('jukebox')
-  [#<AWS::S3::Logging::Log '/jukebox-logs/log-2006-11-14-07-15-24-2061C35880A310A1'>,
-   #<AWS::S3::Logging::Log '/jukebox-logs/log-2006-11-14-08-15-27-D8EEF536EC09E6B3'>,
-   #<AWS::S3::Logging::Log '/jukebox-logs/log-2006-11-14-08-15-29-355812B2B15BD789'>]
+  [#<Aliyun::OSS::Logging::Log '/jukebox-logs/log-2006-11-14-07-15-24-2061C35880A310A1'>,
+   #<Aliyun::OSS::Logging::Log '/jukebox-logs/log-2006-11-14-08-15-27-D8EEF536EC09E6B3'>,
+   #<Aliyun::OSS::Logging::Log '/jukebox-logs/log-2006-11-14-08-15-29-355812B2B15BD789'>]
 
 Each log has a <tt>lines</tt> method that gives you information about each request in that log. All the fields are available 
 as named methods. More information is available in Logging::Log::Line.
@@ -502,12 +502,12 @@ Disabling logging is just as simple as enabling it:
 == Errors
 ==== When things go wrong
 
-Anything you do that makes a request to S3 could result in an error. If it does, the AWS::S3 library will raise an exception 
+Anything you do that makes a request to OSS could result in an error. If it does, the Aliyun::OSS library will raise an exception 
 specific to the error. All exception that are raised as a result of a request returning an error response inherit from the 
 ResponseError exception. So should you choose to rescue any such exception, you can simple rescue ResponseError. 
 
 Say you go to delete a bucket, but the bucket turns out to not be empty. This results in a BucketNotEmpty error (one of the many 
-errors listed at http://docs.amazonwebservices.com/AmazonS3/2006-03-01/ErrorCodeList.html):
+errors listed at http://docs.aliyunwebservices.com/AliyunOSS/2006-03-01/ErrorCodeList.html):
 
   begin
     Bucket.delete('jukebox')
@@ -515,11 +515,11 @@ errors listed at http://docs.amazonwebservices.com/AmazonS3/2006-03-01/ErrorCode
     # ...
   end
 
-Once you've captured the exception, you can extract the error message from S3, as well as the full error response, which includes 
+Once you've captured the exception, you can extract the error message from OSS, as well as the full error response, which includes 
 things like the HTTP response code:
 
   error
-  # => #<AWS::S3::BucketNotEmpty The bucket you tried to delete is not empty>
+  # => #<Aliyun::OSS::BucketNotEmpty The bucket you tried to delete is not empty>
   error.message
   # => "The bucket you tried to delete is not empty"
   error.response.code
@@ -530,7 +530,7 @@ You could use this information to redisplay the error in a way you see fit, or j
 
 ==== Accessing the last request's response
 
-Sometimes methods that make requests to the S3 servers return some object, like a Bucket or an S3Object. 
+Sometimes methods that make requests to the OSS servers return some object, like a Bucket or an OSSObject. 
 Othertimes they return just <tt>true</tt>. Other times they raise an exception that you may want to rescue. Despite all these 
 possible outcomes, every method that makes a request stores its response object for you in Service.response. You can always 
 get to the last request's response via Service.response.

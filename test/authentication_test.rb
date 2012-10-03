@@ -4,33 +4,33 @@ require File.dirname(__FILE__) + '/test_helper'
 class HeaderAuthenticationTest < Test::Unit::TestCase  
   def test_encoded_canonical
     signature = Authentication::Signature.new(request, key_id, secret)
-    assert_equal AmazonDocExampleData::Example1.canonical_string, signature.send(:canonical_string)
-    assert_equal AmazonDocExampleData::Example1.signature, signature.send(:encoded_canonical)
+    assert_equal AliyunDocExampleData::Example1.canonical_string, signature.send(:canonical_string)
+    assert_equal AliyunDocExampleData::Example1.signature, signature.send(:encoded_canonical)
   end
   
   def test_authorization_header
     header = Authentication::Header.new(request, key_id, secret)
-    assert_equal AmazonDocExampleData::Example1.canonical_string, header.send(:canonical_string)
-    assert_equal AmazonDocExampleData::Example1.authorization_header, header
+    assert_equal AliyunDocExampleData::Example1.canonical_string, header.send(:canonical_string)
+    assert_equal AliyunDocExampleData::Example1.authorization_header, header
   end
   
   private
-    def request; AmazonDocExampleData::Example1.request end
-    def key_id ; AmazonDocExampleData::Example1.access_key_id end
-    def secret ; AmazonDocExampleData::Example1.secret_access_key end
+    def request; AliyunDocExampleData::Example1.request end
+    def key_id ; AliyunDocExampleData::Example1.access_key_id end
+    def secret ; AliyunDocExampleData::Example1.secret_access_key end
 end
 
 class QueryStringAuthenticationTest < Test::Unit::TestCase
   def test_query_string
     query_string = Authentication::QueryString.new(request, key_id, secret, :expires_in => 60)
-    assert_equal AmazonDocExampleData::Example3.canonical_string, query_string.send(:canonical_string)
-    assert_equal AmazonDocExampleData::Example3.query_string, query_string
+    assert_equal AliyunDocExampleData::Example3.canonical_string, query_string.send(:canonical_string)
+    assert_equal AliyunDocExampleData::Example3.query_string, query_string
   end
   
   def test_query_string_with_explicit_expiry
     query_string = Authentication::QueryString.new(request, key_id, secret, :expires => expires)
     assert_equal expires, query_string.send(:canonical_string).instance_variable_get(:@options)[:expires]
-    assert_equal AmazonDocExampleData::Example3.query_string, query_string
+    assert_equal AliyunDocExampleData::Example3.query_string, query_string
   end
   
   def test_expires_in_is_coerced_to_being_an_integer_in_case_it_is_a_special_integer_proxy
@@ -52,10 +52,10 @@ class QueryStringAuthenticationTest < Test::Unit::TestCase
   end
   
   private
-    def request; AmazonDocExampleData::Example3.request end
-    def key_id ; AmazonDocExampleData::Example3.access_key_id end
-    def secret ; AmazonDocExampleData::Example3.secret_access_key end
-    def expires; AmazonDocExampleData::Example3.expires end
+    def request; AliyunDocExampleData::Example3.request end
+    def key_id ; AliyunDocExampleData::Example3.access_key_id end
+    def secret ; AliyunDocExampleData::Example3.secret_access_key end
+    def expires; AliyunDocExampleData::Example3.expires end
 end
 
 class CanonicalStringTest < Test::Unit::TestCase  
@@ -108,7 +108,7 @@ class CanonicalStringTest < Test::Unit::TestCase
   end
   
   def test_canonical_string
-    request = AmazonDocExampleData::Example1.request
-    assert_equal AmazonDocExampleData::Example1.canonical_string, Authentication::CanonicalString.new(request)
+    request = AliyunDocExampleData::Example1.request
+    assert_equal AliyunDocExampleData::Example1.canonical_string, Authentication::CanonicalString.new(request)
   end
 end

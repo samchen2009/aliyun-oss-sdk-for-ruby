@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
-module AWS
-  module S3
+module Aliyun
+  module OSS
     class FakeResponse
       attr_reader :code, :body, :headers
       def initialize(options = {})

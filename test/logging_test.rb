@@ -37,7 +37,7 @@ end
 
 class LogTest < Test::Unit::TestCase
   def test_value_converted_to_log_lines
-    log_object = S3Object.new
+    log_object = OSSObject.new
     log_object.value = Fixtures::Logs.simple_log.join
     log = Logging::Log.new(log_object)
     assert_nothing_raised do

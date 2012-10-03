@@ -14,7 +14,7 @@ AccessControlPolicy:
         __content__: READ
       Grantee: 
         URI: 
-          __content__: http://acs.amazonaws.com/groups/global/AllUsers
+          __content__: http://acs.aliyuncs.com/groups/global/AllUsers
         xsi:type: Group
   Owner: 
     DisplayName: 

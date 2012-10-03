@@ -1,9 +1,9 @@
 # -*- encoding : utf-8 -*-
-module AWS
-  module S3
+module Aliyun
+  module OSS
     
-    # Abstract super class of all AWS::S3 exceptions
-    class S3Exception < StandardError
+    # Abstract super class of all Aliyun::OSS exceptions
+    class OSSException < StandardError
     end
     
     # All responses with a code between 300 and 599 that contain an <Error></Error> body are wrapped in an
@@ -11,7 +11,7 @@ module AWS
     # of the xml Error and its message. All such runtime generated exception classes descend from ResponseError
     # and contain the ErrorResponse object so that all code that makes a request can rescue ResponseError and get
     # access to the ErrorResponse.
-    class ResponseError < S3Exception
+    class ResponseError < OSSException
       attr_reader :response
       def initialize(message, response)
         @response = response
@@ -33,10 +33,10 @@ module AWS
     end
     
     # Abstract super class for all invalid options.
-    class InvalidOption < S3Exception
+    class InvalidOption < OSSException
     end
     
-    # Raised if an invalid value is passed to the <tt>:access</tt> option when creating a Bucket or an S3Object.
+    # Raised if an invalid value is passed to the <tt>:access</tt> option when creating a Bucket or an OSSObject.
     class InvalidAccessControlLevel < InvalidOption
       def initialize(valid_levels, access_level)
         super("Valid access control levels are #{valid_levels.inspect}. You specified `#{access_level}'.")
@@ -52,7 +52,7 @@ module AWS
     end
     
     # Raised if a request is attempted before any connections have been established.
-    class NoConnectionEstablished < S3Exception
+    class NoConnectionEstablished < OSSException
     end
     
     # Raised if an unrecognized option is passed when establishing a connection.
@@ -65,7 +65,7 @@ module AWS
     end
     
     # Raised if an invalid bucket name is passed when creating a new Bucket.
-    class InvalidBucketName < S3Exception
+    class InvalidBucketName < OSSException
       def initialize(invalid_name)
         message = "`#{invalid_name}' is not a valid bucket name. "      + 
                   "Bucket names must be between 3 and 255 bytes and "   +
@@ -74,8 +74,8 @@ module AWS
       end
     end
     
-    # Raised if an invalid key name is passed when creating an S3Object.
-    class InvalidKeyName < S3Exception
+    # Raised if an invalid key name is passed when creating an OSSObject.
+    class InvalidKeyName < OSSException
       def initialize(invalid_name)
         message = "`#{invalid_name}' is not a valid key name. "   + 
                   "Key names must be no more than 1024 bytes long."
@@ -83,8 +83,8 @@ module AWS
       end
     end
     
-    # Raised if an invalid value is assigned to an S3Object's specific metadata name.
-    class InvalidMetadataValue < S3Exception
+    # Raised if an invalid value is assigned to an OSSObject's specific metadata name.
+    class InvalidMetadataValue < OSSException
       def initialize(invalid_names)
         message = "The following metadata names have invalid values: #{invalid_names.join(', ')}. " +
                   "Metadata can not be larger than 2kilobytes."
@@ -94,35 +94,35 @@ module AWS
     
     # Raised if the current bucket can not be inferred when not explicitly specifying the target bucket in the calling
     # method's arguments.
-    class CurrentBucketNotSpecified < S3Exception
+    class CurrentBucketNotSpecified < OSSException
       def initialize(address)
         message = "No bucket name can be inferred from your current connection's address (`#{address}')"
         super(message)
       end
     end
     
-    # Raised when an orphaned S3Object belonging to no bucket tries to access its (non-existant) bucket.
-    class NoBucketSpecified < S3Exception
+    # Raised when an orphaned OSSObject belonging to no bucket tries to access its (non-existant) bucket.
+    class NoBucketSpecified < OSSException
       def initialize
         super('The current object must have its bucket set')
       end
     end
     
-    # Raised if an attempt is made to save an S3Object that does not have a key set.
-    class NoKeySpecified < S3Exception
+    # Raised if an attempt is made to save an OSSObject that does not have a key set.
+    class NoKeySpecified < OSSException
       def initialize
         super('The current object must have its key set')
       end
     end
     
     # Raised if you try to save a deleted object.
-    class DeletedObject < S3Exception
+    class DeletedObject < OSSException
       def initialize
         super('You can not save a deleted object')
       end
     end
     
-    class ExceptionClassClash < S3Exception #:nodoc:
+    class ExceptionClassClash < OSSException #:nodoc:
       def initialize(klass)
         message = "The exception class you tried to create (`#{klass}') exists and is not an exception"
         super(message)

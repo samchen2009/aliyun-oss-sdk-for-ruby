@@ -33,10 +33,10 @@ class ErrorResponseTest < Test::Unit::TestCase
   end
 end
 
-class S3ObjectResponseTest < Test::Unit::TestCase
+class OSSObjectResponseTest < Test::Unit::TestCase
   def test_etag_extracted
-    mock_connection_for(S3Object, :returns => {:headers => {"etag" => %("acbd18db4cc2f85cedef654fccc4a4d8")}}).once
-    object_response = S3Object.create('name_does_not_matter', 'data does not matter', 'bucket does not matter')
+    mock_connection_for(OSSObject, :returns => {:headers => {"etag" => %("acbd18db4cc2f85cedef654fccc4a4d8")}}).once
+    object_response = OSSObject.create('name_does_not_matter', 'data does not matter', 'bucket does not matter')
     assert_equal "acbd18db4cc2f85cedef654fccc4a4d8", object_response.etag 
   end
 end
@@ -50,13 +50,13 @@ class ResponseClassFinderTest < Test::Unit::TestCase
   
   def test_on_base
     assert_equal Base::Response, FindResponseClass.for(Base)
-    assert_equal Base::Response, FindResponseClass.for(AWS::S3::Base)
+    assert_equal Base::Response, FindResponseClass.for(Aliyun::OSS::Base)
     
   end
   
   def test_on_subclass_with_corresponding_response_class
     assert_equal Bucket::Response, FindResponseClass.for(Bucket)
-    assert_equal Bucket::Response, FindResponseClass.for(AWS::S3::Bucket)
+    assert_equal Bucket::Response, FindResponseClass.for(Aliyun::OSS::Bucket)
   end
   
   def test_on_subclass_with_intermediary_parent_that_has_corresponding_response_class

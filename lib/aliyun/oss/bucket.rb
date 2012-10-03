@@ -1,19 +1,19 @@
 # -*- encoding : utf-8 -*-
-module AWS
-  module S3
-    # Buckets are containers for objects (the files you store on S3). To create a new bucket you just specify its name.
+module Aliyun
+  module OSS
+    # Buckets are containers for objects (the files you store on OSS). To create a new bucket you just specify its name.
     # 
     #   # Pick a unique name, or else you'll get an error 
     #   # if the name is already taken.
     #   Bucket.create('jukebox')
     # 
-    # Bucket names must be unique across the entire S3 system, sort of like domain names across the internet. If you try
+    # Bucket names must be unique across the entire OSS system, sort of like domain names across the internet. If you try
     # to create a bucket with a name that is already taken, you will get an error.
     #
     # Assuming the name you chose isn't already taken, your new bucket will now appear in the bucket list:
     # 
     #   Service.buckets
-    #   # => [#<AWS::S3::Bucket @attributes={"name"=>"jukebox"}>]
+    #   # => [#<Aliyun::OSS::Bucket @attributes={"name"=>"jukebox"}>]
     # 
     # Once you have succesfully created a bucket you can you can fetch it by name using Bucket.find.
     #
@@ -36,17 +36,17 @@ module AWS
     # To add an object to a bucket you specify the name of the object, its value, and the bucket to put it in.
     # 
     #   file = 'black-flowers.mp3'
-    #   S3Object.store(file, open(file), 'jukebox')
+    #   OSSObject.store(file, open(file), 'jukebox')
     #
     # You'll see your file has been added to it:
     # 
     #   music_bucket.objects
-    #   # => [#<AWS::S3::S3Object '/jukebox/black-flowers.mp3'>]
+    #   # => [#<Aliyun::OSS::OSSObject '/jukebox/black-flowers.mp3'>]
     # 
     # You can treat your bucket like a hash and access objects by name:
     # 
     #   jukebox['black-flowers.mp3']
-    #   # => #<AWS::S3::S3Object '/jukebox/black-flowers.mp3'>
+    #   # => #<Aliyun::OSS::OSSObject '/jukebox/black-flowers.mp3'>
     # 
     # In the event that you want to delete a bucket, you can use Bucket.delete.
     #
@@ -65,7 +65,7 @@ module AWS
         #
         #   Bucket.create('jukebox')
         #
-        # Your bucket name must be unique across all of S3. If the name
+        # Your bucket name must be unique across all of OSS. If the name
         # you request has already been taken, you will get a 409 Conflict response, and a BucketAlreadyExists exception
         # will be raised.
         #
@@ -73,7 +73,7 @@ module AWS
         #
         #   Bucket.create('internet_drop_box', :access => :public_read_write)
         #
-        # The full list of access levels that you can set on Bucket and S3Object creation are listed in the README[link:files/README.html] 
+        # The full list of access levels that you can set on Bucket and OSSObject creation are listed in the README[link:files/README.html] 
         # in the section called 'Setting access levels'.
         def create(name, options = {})
           validate_name!(name)
@@ -121,9 +121,9 @@ module AWS
         # * <tt>:prefix</tt> - Restricts the response to only contain results that begin with the specified prefix.
         #
         #     Bucket.objects('jukebox')
-        #     # => [<AWS::S3::S3Object '/jazz/miles.mp3'>, <AWS::S3::S3Object '/jazz/dolphy.mp3'>, <AWS::S3::S3Object '/classical/malher.mp3'>]
+        #     # => [<Aliyun::OSS::OSSObject '/jazz/miles.mp3'>, <Aliyun::OSS::OSSObject '/jazz/dolphy.mp3'>, <Aliyun::OSS::OSSObject '/classical/malher.mp3'>]
         #     Bucket.objects('jukebox', :prefix => 'classical')
-        #     # => [<AWS::S3::S3Object '/classical/malher.mp3'>]
+        #     # => [<Aliyun::OSS::OSSObject '/classical/malher.mp3'>]
         #
         # * <tt>:marker</tt> - Marker specifies where in the result set to resume listing. It restricts the response 
         #   to only contain results that occur alphabetically _after_ the value of marker. To retrieve the next set of results, 
@@ -131,17 +131,17 @@ module AWS
         # 
         #     # Skip 'mahler'
         #     Bucket.objects('jukebox', :marker => 'mb')
-        #     # => [<AWS::S3::S3Object '/jazz/miles.mp3'>]
+        #     # => [<Aliyun::OSS::OSSObject '/jazz/miles.mp3'>]
         #
         # === Examples
         #
         #   # Return no more than 2 objects whose key's are listed alphabetically after the letter 'm'.
         #   Bucket.objects('jukebox', :marker => 'm', :max_keys => 2)
-        #   # => [<AWS::S3::S3Object '/jazz/miles.mp3'>, <AWS::S3::S3Object '/classical/malher.mp3'>]
+        #   # => [<Aliyun::OSS::OSSObject '/jazz/miles.mp3'>, <Aliyun::OSS::OSSObject '/classical/malher.mp3'>]
         #
         #   # Return no more than 2 objects whose key's are listed alphabetically after the letter 'm' and have the 'jazz' prefix.
         #   Bucket.objects('jukebox', :marker => 'm', :max_keys => 2, :prefix => 'jazz')
-        #   # => [<AWS::S3::S3Object '/jazz/miles.mp3'>]
+        #   # => [<Aliyun::OSS::OSSObject '/jazz/miles.mp3'>]
         def objects(name = nil, options = {})
           find(name, options).object_cache
         end
@@ -164,7 +164,7 @@ module AWS
           Base.delete(name).success?
         end
         
-        # List all your buckets. This is a convenient wrapper around AWS::S3::Service.buckets.
+        # List all your buckets. This is a convenient wrapper around Aliyun::OSS::Service.buckets.
         def list(reload = false)
           Service.buckets(reload)
         end
@@ -197,15 +197,15 @@ module AWS
       # specified key.
       #
       #   bucket.objects
-      #   => [#<AWS::S3::S3Object '/marcel_molina/beluga_baby.jpg'>,
-      #       #<AWS::S3::S3Object '/marcel_molina/tongue_overload.jpg'>]
+      #   => [#<Aliyun::OSS::OSSObject '/marcel_molina/beluga_baby.jpg'>,
+      #       #<Aliyun::OSS::OSSObject '/marcel_molina/tongue_overload.jpg'>]
       #   bucket['beluga_baby.jpg']
-      #   => #<AWS::S3::S3Object '/marcel_molina/beluga_baby.jpg'>
+      #   => #<Aliyun::OSS::OSSObject '/marcel_molina/beluga_baby.jpg'>
       def [](object_key)
         detect {|file| file.key == object_key.to_s}
       end
       
-      # Initializes a new S3Object belonging to the current bucket.
+      # Initializes a new OSSObject belonging to the current bucket.
       #
       #   object = bucket.new_object
       #   object.value = data
@@ -214,12 +214,12 @@ module AWS
       #   bucket.objects.include?(object)
       #   => true
       def new_object(attributes = {})
-        object = S3Object.new(attributes)
+        object = OSSObject.new(attributes)
         register(object)
         object
       end
       
-      # List S3Object's of the bucket.
+      # List OSSObject's of the bucket.
       #
       # Once fetched the objects will be cached. You can reload the objects by passing <tt>:reload</tt>.
       #

@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
-module AWS
-  module S3
+module Aliyun
+  module OSS
     module VERSION #:nodoc:
       MAJOR    = '0'
       MINOR    = '6'

@@ -1,12 +1,12 @@
 # -*- encoding : utf-8 -*-
-module AWS
-  module S3
-    # Anything you do that makes a request to S3 could result in an error. If it does, the AWS::S3 library will raise an exception 
+module Aliyun
+  module OSS
+    # Anything you do that makes a request to OSS could result in an error. If it does, the Aliyun::OSS library will raise an exception 
     # specific to the error. All exception that are raised as a result of a request returning an error response inherit from the 
     # ResponseError exception. So should you choose to rescue any such exception, you can simple rescue ResponseError. 
     # 
     # Say you go to delete a bucket, but the bucket turns out to not be empty. This results in a BucketNotEmpty error (one of the many 
-    # errors listed at http://docs.amazonwebservices.com/AmazonS3/2006-03-01/ErrorCodeList.html):
+    # errors listed at http://docs.aliyunwebservices.com/AliyunOSS/2006-03-01/ErrorCodeList.html):
     # 
     #   begin
     #     Bucket.delete('jukebox')
@@ -14,11 +14,11 @@ module AWS
     #     # ...
     #   end
     # 
-    # Once you've captured the exception, you can extract the error message from S3, as well as the full error response, which includes 
+    # Once you've captured the exception, you can extract the error message from OSS, as well as the full error response, which includes 
     # things like the HTTP response code:
     # 
     #   error
-    #   # => #<AWS::S3::BucketNotEmpty The bucket you tried to delete is not empty>
+    #   # => #<Aliyun::OSS::BucketNotEmpty The bucket you tried to delete is not empty>
     #   error.message
     #   # => "The bucket you tried to delete is not empty"
     #   error.response.code
@@ -31,7 +31,7 @@ module AWS
       def initialize(error, response = nil)
         @error     = error
         @response  = response
-        @container = AWS::S3
+        @container = Aliyun::OSS
         find_or_create_exception!
       end
       

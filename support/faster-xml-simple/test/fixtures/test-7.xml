@@ -14,7 +14,7 @@
     </Grant>
     <Grant>
       <Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Group">
-        <URI>http://acs.amazonaws.com/groups/global/AllUsers</URI>
+        <URI>http://acs.aliyuncs.com/groups/global/AllUsers</URI>
       </Grantee>
       <Permission>READ</Permission>
     </Grant>

@@ -1,56 +1,56 @@
 # -*- encoding : utf-8 -*-
-module AWS #:nodoc:
-  # AWS::S3 is a Ruby library for Amazon's Simple Storage Service's REST API (http://aws.amazon.com/s3).
-  # Full documentation of the currently supported API can be found at http://docs.amazonwebservices.com/AmazonS3/2006-03-01.
+module Aliyun #:nodoc:
+  # Aliyun::OSS is a Ruby library for Aliyun's Simple Storage Service's REST API (http://aliyun.aliyun.com/oss).
+  # Full documentation of the currently supported API can be found at http://docs.aliyunwebservices.com/AliyunOSS/2006-03-01.
   # 
   # == Getting started
   # 
-  # To get started you need to require 'aws/s3':
+  # To get started you need to require 'aliyun/oss':
   # 
   #   % irb -rubygems
-  #   irb(main):001:0> require 'aws/s3'
+  #   irb(main):001:0> require 'aliyun/oss'
   #   # => true
   # 
-  # The AWS::S3 library ships with an interactive shell called <tt>s3sh</tt>. From within it, you have access to all the operations the library exposes from the command line.
+  # The Aliyun::OSS library ships with an interactive shell called <tt>osssh</tt>. From within it, you have access to all the operations the library exposes from the command line.
   # 
-  #   % s3sh
+  #   % osssh
   #   >> Version
   # 
   # Before you can do anything, you must establish a connection using Base.establish_connection!.  A basic connection would look something like this:
   # 
-  #   AWS::S3::Base.establish_connection!(
+  #   Aliyun::OSS::Base.establish_connection!(
   #     :access_key_id     => 'abc', 
   #     :secret_access_key => '123'
   #   )
   # 
   # The minimum connection options that you must specify are your access key id and your secret access key.
   # 
-  # (If you don't already have your access keys, all you need to sign up for the S3 service is an account at Amazon. You can sign up for S3 and get access keys by visiting http://aws.amazon.com/s3.)
+  # (If you don't already have your access keys, all you need to sign up for the OSS service is an account at Aliyun. You can sign up for OSS and get access keys by visiting http://aliyun.aliyun.com/oss.)
   # 
   # For convenience, if you set two special environment variables with the value of your access keys, the console will automatically create a default connection for you. For example:
   # 
-  #   % cat .amazon_keys
-  #   export AMAZON_ACCESS_KEY_ID='abcdefghijklmnop'
-  #   export AMAZON_SECRET_ACCESS_KEY='1234567891012345'
+  #   % cat .aliyun_keys
+  #   export OSS_ACCESS_KEY_ID='abcdefghijklmnop'
+  #   export OSS_SECRET_ACCESS_KEY='1234567891012345'
   # 
   # Then load it in your shell's rc file.
   # 
   #   % cat .zshrc
-  #   if [[ -f "$HOME/.amazon_keys" ]]; then
-  #     source "$HOME/.amazon_keys";
+  #   if [[ -f "$HOME/.aliyun_keys" ]]; then
+  #     source "$HOME/.aliyun_keys";
   #   fi
   # 
-  # See more connection details at AWS::S3::Connection::Management::ClassMethods.
-  module S3
+  # See more connection details at Aliyun::OSS::Connection::Management::ClassMethods.
+  module OSS
     constant :DEFAULT_HOST, 'oss.aliyuncs.com'
     
-    # AWS::S3::Base is the abstract super class of all classes who make requests against S3, such as the built in
-    # Service, Bucket and S3Object classes. It provides methods for making requests, inferring or setting response classes,
-    # processing request options, and accessing attributes from S3's response data.
+    # Aliyun::OSS::Base is the abstract super class of all classes who make requests against OSS, such as the built in
+    # Service, Bucket and OSSObject classes. It provides methods for making requests, inferring or setting response classes,
+    # processing request options, and accessing attributes from OSS's response data.
     #
     # Establishing a connection with the Base class is the entry point to using the library:
     #
-    #   AWS::S3::Base.establish_connection!(:access_key_id => '...', :secret_access_key => '...')
+    #   Aliyun::OSS::Base.establish_connection!(:access_key_id => '...', :secret_access_key => '...')
     #
     # The <tt>:access_key_id</tt> and <tt>:secret_access_key</tt> are the two required connection options. More 
     # details can be found in the docs for Connection::Management::ClassMethods.
@@ -72,7 +72,7 @@ module AWS #:nodoc:
 
           Error::Response.new(response.response).error.raise if response.error?
           response
-        # Once in a while, a request to S3 returns an internal error. A glitch in the matrix I presume. Since these 
+        # Once in a while, a request to OSS returns an internal error. A glitch in the matrix I presume. Since these 
         # errors are few and far between the request method will rescue InternalErrors the first three times they encouter them
         # and will retry the request again. Most of the time the second attempt will work.
         rescue InternalError, RequestTimeout
@@ -109,9 +109,9 @@ module AWS #:nodoc:
         end
         
         # If you plan on always using a specific bucket for certain files, you can skip always having to specify the bucket by creating 
-        # a subclass of Bucket or S3Object and telling it what bucket to use:
+        # a subclass of Bucket or OSSObject and telling it what bucket to use:
         # 
-        #   class JukeBoxSong < AWS::S3::S3Object
+        #   class JukeBoxSong < Aliyun::OSS::OSSObject
         #     set_current_bucket_to 'jukebox'
         #   end
         # 
@@ -132,7 +132,7 @@ module AWS #:nodoc:
         # 
         #   other_song = JukeBoxSong.find('baby-please-come-home.mp3')
         def set_current_bucket_to(name)
-          raise ArgumentError, "`#{__method__}' must be called on a subclass of #{self.name}" if self == AWS::S3::Base
+          raise ArgumentError, "`#{__method__}' must be called on a subclass of #{self.name}" if self == Aliyun::OSS::Base
           instance_eval(<<-EVAL)
             def current_bucket
               '#{name}'

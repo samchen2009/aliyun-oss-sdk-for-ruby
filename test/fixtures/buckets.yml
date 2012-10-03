@@ -2,7 +2,7 @@ empty_bucket_list: >
   <ListAllMyBucketsResult xmlns="http://oss.aliyuncs.com/doc/2006-03-01/">
     <Owner>
       <ID>ab00c3106e091f8fe23154c85678cda66628adb330bc00f02cf4a1c36d76bc48</ID>
-      <DisplayName>amazon</DisplayName>
+      <DisplayName>aliyun</DisplayName>
     </Owner>
     <Buckets/>
   </ListAllMyBucketsResult>
@@ -12,7 +12,7 @@ bucket_list_with_one_bucket: >
   <ListAllMyBucketsResult xmlns="http://oss.aliyuncs.com/doc/2006-03-01/">
     <Owner>
       <ID>ab00c3106e091f8fe23154c85678cda66628adb330bc00f02cf4a1c36d76bc48</ID>
-      <DisplayName>amazon</DisplayName>
+      <DisplayName>aliyun</DisplayName>
     </Owner>
     <Buckets>
       <Bucket>
@@ -27,7 +27,7 @@ bucket_list_with_more_than_one_bucket: >
   <ListAllMyBucketsResult xmlns="http://oss.aliyuncs.com/doc/2006-03-01/">
     <Owner>
       <ID>ab00c3106e091f8fe23154c85678cda66628adb330bc00f02cf4a1c36d76bc48</ID>
-      <DisplayName>amazon</DisplayName>
+      <DisplayName>aliyun</DisplayName>
     </Owner>
     <Buckets>
       <Bucket>
