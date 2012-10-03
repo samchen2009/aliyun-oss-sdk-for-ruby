@@ -18,7 +18,6 @@ require 's3/version'
 require 's3/parsing'
 require 's3/acl'
 require 's3/logging'
-require 's3/bittorrent'
 require 's3/service'
 require 's3/owner'
 require 's3/bucket'
@@ -36,10 +35,6 @@ end
 AWS::S3::Bucket.class_eval do
   include AWS::S3::Logging::Management
   include AWS::S3::ACL::Bucket
-end
-
-AWS::S3::S3Object.class_eval do
-  include AWS::S3::BitTorrent
 end
 
 require_library_or_gem 'xmlsimple', 'xml-simple' unless defined? XmlSimple
