@@ -20,7 +20,7 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     
     response = nil
     assert_nothing_raised do
-      response = S3Object.create(key, value, TEST_BUCKET, :access => :public_read, :content_type => content_type)
+      response = S3Object.create(key, value, TEST_BUCKET, :content_type => content_type)
     end
     
     # Check response
@@ -103,6 +103,7 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     
     # Test that it is publicly readable
     
+    Bucket.acl(TEST_BUCKET, :public_read)
     response = fetch_object_at(unauthenticated_url)
     assert (200..299).include?(response.code.to_i)
     
@@ -145,9 +146,7 @@ class RemoteS3ObjectTest < Test::Unit::TestCase
     
     # Change acl
     
-    assert_nothing_raised do
-      S3Object.create(object.key, object.value, TEST_BUCKET, :access => :private, :content_type => object.content_type)
-    end
+    Bucket.acl(TEST_BUCKET, :private)
     
     # Confirm object is no longer publicly readable
     
