@@ -98,7 +98,7 @@ class ConnectionTest < Test::Unit::TestCase
 
   def test_url_for_with_and_without_authenticated_urls
     connection = Connection.new(:access_key_id => '123', :secret_access_key => 'abc', :server => 'example.org')
-    authenticated = lambda {|url| url['?AWSAccessKeyId']}
+    authenticated = lambda {|url| url['?OSSAccessKeyId']}
     assert authenticated[connection.url_for('/foo')]
     assert authenticated[connection.url_for('/foo', :authenticated => true)]
     assert !authenticated[connection.url_for('/foo', :authenticated => false)]

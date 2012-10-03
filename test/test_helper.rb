@@ -74,7 +74,7 @@ module AmazonDocExampleData
       end
       
       def query_string
-        'AWSAccessKeyId=44CF9590006BF252F707&Expires=1141889120&Signature=vjbyPxybdZaNmGa%2ByT272YEAiv4%3D'
+        'OSSAccessKeyId=44CF9590006BF252F707&Expires=1141889120&Signature=vjbyPxybdZaNmGa%2ByT272YEAiv4%3D'
       end
       
       def canonical_string
