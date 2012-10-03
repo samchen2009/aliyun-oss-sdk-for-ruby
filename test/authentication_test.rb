@@ -81,7 +81,6 @@ class CanonicalStringTest < Test::Unit::TestCase
       ['/test/query/string?acl&foo=bar',     '/test/query/string?acl'],
       ['/test/query/string?foo=bar&acl',     '/test/query/string?acl'],
       ['/test/query/string?acl=foo',         '/test/query/string?acl'],
-      ['/test/query/string?torrent=foo',     '/test/query/string?torrent'],
       ['/test/query/string?logging=foo',     '/test/query/string?logging'],
       ['/test/query/string?bar=baz&acl=foo', '/test/query/string?acl']
     ]

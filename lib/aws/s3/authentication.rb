@@ -174,7 +174,7 @@ module AWS
               self << (key =~ self.class.amazon_header_prefix ? "#{key}:#{value}" : value)
               self << "\n"
             end
-            self << path
+            self << URI.unescape(path)
           end
       
           def initialize_headers
@@ -210,7 +210,7 @@ module AWS
           end
           
           def extract_significant_parameter
-            request.path[/[&?](acl|torrent|logging)(?:&|=|$)/, 1]
+            request.path[/[&?](acl|logging)(?:&|=|$)/, 1]
           end
           
           def only_path
