@@ -88,7 +88,7 @@ class String
   else
     def remove_extended!
       #gsub!(/[\x80-\xFF]/) { "%02X" % $&[0] }
-      gsub!(Regext.new('/[\x80-\xFF]')) { "%02X" % $&[0] }
+      gsub!(Regexp.new('[\x80-\xFF]')) { "%02X" % $&[0] }
     end
   end
   
