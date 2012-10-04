@@ -1,7 +1,7 @@
 = Aliyun::OSS
 
-Aliyun::OSS is a Ruby library for Aliyun's Simple Storage Service's REST API (http://aliyun.aliyun.com/oss).
-Full documentation of the currently supported API can be found at http://docs.aliyunwebservices.com/AliyunOSS/2006-03-01.
+Aliyun::OSS is a Ruby library for Aliyun's Simple Storage Service's REST API (http://www.aliyun.com/product/oss).
+Full documentation of the currently supported API can be found at http://www.aliyun.com/product/oss#resources.
 
 == Getting started
 
@@ -276,32 +276,6 @@ Now all operations that would have required a bucket name no longer do.
   other_song = JukeBoxSong.find('baby-please-come-home.mp3')
 
 
-== BitTorrent
-==== Another way to download large files
-
-Objects on OSS can be distributed via the BitTorrent file sharing protocol. 
-
-You can get a torrent file for an object by calling <tt>torrent_for</tt>:
-
-  OSSObject.torrent_for 'kiss.jpg', 'marcel'
-
-Or just call the <tt>torrent</tt> method if you already have the object:
-
-  song = OSSObject.find 'kiss.jpg', 'marcel'
-  song.torrent
-
-Calling <tt>grant_torrent_access_to</tt> on a object will allow anyone to anonymously
-fetch the torrent file for that object:
-
-  OSSObject.grant_torrent_access_to 'kiss.jpg', 'marcel'
-
-Anonymous requests to
-
-  http://oss.aliyuncs.com/marcel/kiss.jpg?torrent
-
-will serve up the torrent file for that object.
-
-
 == Access control
 ==== Using canned access control policies
 
@@ -328,82 +302,6 @@ Since the image we created is publicly readable, we can access it directly from 
 and specifying the object's key without a special authenticated url:
 
  http://oss.aliyuncs.com/marcel/kiss.jpg
-
-==== Building custum access policies
-
-For both buckets and objects, you can use the <tt>acl</tt> method to see its access control policy:
-
-  policy = OSSObject.acl('kiss.jpg', 'marcel')
-  pp policy.grants
-  [#<Aliyun::OSS::ACL::Grant FULL_CONTROL to noradio>,
-   #<Aliyun::OSS::ACL::Grant READ to AllUsers Group>]
-
-Policies are made up of one or more grants which grant a specific permission to some grantee. Here we see the default FULL_CONTROL grant 
-to the owner of this object. There is also READ permission granted to the Allusers Group, which means anyone has read access for the object.
-
-Say we wanted to grant access to anyone to read the access policy of this object. The current READ permission only grants them permission to read 
-the object itself (for example, from a browser) but it does not allow them to read the access policy. For that we will need to grant the AllUsers group the READ_ACP permission.
-
-First we'll create a new grant object:
-
-  grant = ACL::Grant.new
-  # => #<Aliyun::OSS::ACL::Grant (permission) to (grantee)>
-  grant.permission = 'READ_ACP'
-
-Now we need to indicate who this grant is for. In other words, who the grantee is:
-
-  grantee = ACL::Grantee.new
-  # => #<Aliyun::OSS::ACL::Grantee (xsi not set yet)>
-
-There are three ways to specify a grantee: 1) by their internal aliyun id, such as the one returned with an object's Owner, 
-2) by their Aliyun account email address or 3) by specifying a group. As of this writing you can not create custom groups, but 
-Aliyun does provide three already: AllUsers, Authenticated and LogDelivery. In this case we want to provide the grant to all users. 
-This effectively means "anyone".
-
-  grantee.group = 'AllUsers'
-
-Now that our grantee is setup, we'll associate it with the grant:
-
-  grant.grantee = grantee
-  grant
-  # => #<Aliyun::OSS::ACL::Grant READ_ACP to AllUsers Group>
-
-Are grant has all the information we need. Now that it's ready, we'll add it on to the object's access control policy's list of grants:
-
-  policy.grants << grant
-  pp policy.grants
-  [#<Aliyun::OSS::ACL::Grant FULL_CONTROL to noradio>,
-   #<Aliyun::OSS::ACL::Grant READ to AllUsers Group>,
-   #<Aliyun::OSS::ACL::Grant READ_ACP to AllUsers Group>]
-
-Now that the policy has the new grant, we reuse the <tt>acl</tt> method to persist the policy change:
-
-  OSSObject.acl('kiss.jpg', 'marcel', policy)
-
-If we fetch the object's policy again, we see that the grant has been added:
-
-  pp OSSObject.acl('kiss.jpg', 'marcel').grants
-  [#<Aliyun::OSS::ACL::Grant FULL_CONTROL to noradio>,
-   #<Aliyun::OSS::ACL::Grant READ to AllUsers Group>,
-   #<Aliyun::OSS::ACL::Grant READ_ACP to AllUsers Group>]
-
-If we were to access this object's acl url from a browser: 
-
-  http://oss.aliyuncs.com/marcel/kiss.jpg?acl
-
-we would be shown its access control policy.
-
-==== Pre-prepared grants
-
-Alternatively, the ACL::Grant class defines a set of stock grant policies that you can fetch by name. In most cases, you can 
-just use one of these pre-prepared grants rather than building grants by hand. Two of these stock policies are <tt>:public_read</tt> 
-and <tt>:public_read_acp</tt>, which happen to be the two grants that we built by hand above. In this case we could have simply written:
-
-  policy.grants << ACL::Grant.grant(:public_read)
-  policy.grants << ACL::Grant.grant(:public_read_acp)
-  OSSObject.acl('kiss.jpg', 'marcel', policy)
-
-The full details can be found in ACL::Policy, ACL::Grant and ACL::Grantee.
 
 
 ==== Accessing private objects from a browser

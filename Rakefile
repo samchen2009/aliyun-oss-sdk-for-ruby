@@ -36,7 +36,7 @@ namespace :doc do
   end
 
   task :readme do
-    require 'support/rdoc/code_info'
+    require File.dirname(__FILE__) + '/support/rdoc/code_info'
     RDoc::CodeInfo.parse('lib/**/*.rb')
     
     strip_comments = lambda {|comment| comment.gsub(/^# ?/, '')}
@@ -62,14 +62,13 @@ namespace :dist do
     s.version           = Gem::Version.new(Aliyun::OSS::Version)
     s.summary           = "Client library for Aliyun's Simple Storage Service's REST API"
     s.description       = s.summary
-    s.email             = 'marcel@vernix.org'
-    s.author            = 'Marcel Molina Jr.'
+    s.email             = 'mr.mangege@gmail.com'
+    s.author            = 'mangege'
     s.has_rdoc          = true
     s.extra_rdoc_files  = %w(README COPYING INSTALL)
-    s.homepage          = 'http://aliyun.rubyforge.org'
-    s.rubyforge_project = 'aliyun'
+    s.homepage          = 'https://github.com/mangege/aliyun-oss-sdk-for-ruby'
     s.files             = FileList['Rakefile', 'lib/**/*.rb', 'bin/*', 'support/**/*.rb']
-    s.executables       << 'osssh'
+    s.executables       << 'oss'
     s.test_files        = Dir['test/**/*']
     
     s.add_dependency 'xml-simple'
@@ -81,7 +80,8 @@ namespace :dist do
   end
     
   # Regenerate README before packaging
-  task :package => 'doc:readme'
+  #task :package => 'doc:readme' #TODO 暂时不生成文档
+  task :package
   Gem::PackageTask.new(spec) do |pkg|
     pkg.need_tar_gz = true
     pkg.package_files.include('{lib,script,test,support}/**/*')
@@ -162,7 +162,8 @@ namespace :dist do
   desc 'Upload a beta gem'
   task :push_beta_gem => [:clobber_package, :package] do
     beta_gem = package_name[spec]
-    sh %(scp #{beta_gem}.gem  marcel@rubyforge.org:/var/www/gforge-projects/aliyun/beta)
+    #sh %(scp #{beta_gem}.gem  marcel@rubyforge.org:/var/www/gforge-projects/aliyun/beta)
+    sh %(gem push #{beta_gem}.gem)
   end
   
   task :spec do
