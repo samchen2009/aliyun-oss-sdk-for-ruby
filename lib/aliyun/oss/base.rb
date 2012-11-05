@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 module Aliyun #:nodoc:
-  # Aliyun::OSS is a Ruby library for Aliyun's Simple Storage Service's REST API (http://aliyun.aliyun.com/oss).
+  # Aliyun::OSS is a Ruby library for Aliyun's Open Storage Service's REST API (http://aliyun.aliyun.com/oss).
   # Full documentation of the currently supported API can be found at http://docs.aliyunwebservices.com/AliyunOSS/2006-03-01.
   # 
   # == Getting started

@@ -60,7 +60,7 @@ namespace :dist do
   spec = Gem::Specification.new do |s|
     s.name              = 'aliyun-oss'
     s.version           = Gem::Version.new(Aliyun::OSS::Version)
-    s.summary           = "Client library for Aliyun's Simple Storage Service's REST API"
+    s.summary           = "Client library for Aliyun's Open Storage Service's REST API"
     s.description       = s.summary
     s.email             = 'mr.mangege@gmail.com'
     s.author            = 'mangege'
